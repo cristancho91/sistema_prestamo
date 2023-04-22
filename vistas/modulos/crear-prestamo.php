@@ -20,7 +20,7 @@ if($_SESSION["perfil"] == "Especial"){
     
     <h1>
       
-      Crear venta
+      Crear prestamo
     
     </h1>
 
@@ -28,7 +28,7 @@ if($_SESSION["perfil"] == "Especial"){
       
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
       
-      <li class="active">Crear venta</li>
+      <li class="active">Crear prestamo</li>
     
     </ol>
 
@@ -87,11 +87,11 @@ if($_SESSION["perfil"] == "Especial"){
                     $item = null;
                     $valor = null;
 
-                    $ventas = ControladorVentas::ctrMostrarVentas($item, $valor);
+                    $ventas = ControladorPrestamos::ctrMostrarPrestamos($item, $valor);
 
                     if(!$ventas){
 
-                      echo '<input type="text" class="form-control" id="nuevaVenta" name="nuevaVenta" value="10001" readonly>';
+                      echo '<input type="text" class="form-control" id="codigoPrestamo" name="codigoPrestamo" value="10001" readonly>';
                   
 
                     }else{
@@ -102,11 +102,11 @@ if($_SESSION["perfil"] == "Especial"){
                       
                       }
 
-                      $codigo = $value["codigo"] + 1;
+                      $codigo = $value["id_prestamo"] + 1;
 
 
 
-                      echo '<input type="text" class="form-control" id="nuevaVenta" name="nuevaVenta" value="'.$codigo.'" readonly>';
+                      echo '<input type="text" class="form-control" id="codigoPrestamo" name="codigoPrestamo" value="'.$codigo.'" readonly>';
                   
 
                     }
@@ -156,120 +156,112 @@ if($_SESSION["perfil"] == "Especial"){
                 </div>
 
                 <!--=====================================
+                ENTRADA PARA AGREGAR prestamo
+                ======================================-->
+                <div class="input-group">
+      
+                  <span class="input-group-addon"><i class="fa fa-money"></i></span>
+
+                  <input type ="number" class="form-control nuevoPrestamo"  name="nuevoPrestamo" value="" placeholder="introduce la cantidad a prestar..."  required>
+
+                </div>
+
+                <!--=====================================
                 ENTRADA PARA AGREGAR PRODUCTO
                 ======================================--> 
 
-                <div class="form-group row nuevoProducto">
+                <!-- <div class="form-group row nuevoProducto">
 
                 
 
                 </div>
 
-                <input type="hidden" id="listaProductos" name="listaProductos">
+                <input type="hidden" id="listaProductos" name="listaProductos"> -->
 
                 <!--=====================================
                 BOTÓN PARA AGREGAR PRODUCTO
                 ======================================-->
 
-                <button type="button" class="btn btn-default hidden-lg btnAgregarProducto">Agregar producto</button>
+                <!-- <button type="button" class="btn btn-default hidden-lg btnAgregarProducto">Agregar producto</button>-->
 
-                <hr>
+                <hr> 
 
                 <div class="row">
 
                   <!--=====================================
-                  ENTRADA IMPUESTOS Y TOTAL
+                  ENTRADAS
                   ======================================-->
                   
-                  <div class="col-xs-8 pull-right">
+                  <div class="col-xs-12 col-lg-12 ">
                     
-                    <table class="table">
+                      <div class="form-group col-lg-6">
+                        
+                        <div class="input-group">
+                          <label for="">Plazo:</label>
+                          <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago" required>
+                            <option value="">Seleccione el plazo </option>
+                            <option value="1">1 mes</option>
+                            <option value="2">2 meses</option>
+                            <option value="3">3 Meses</option>
+                            <option value="4">4 Meses</option>
+                            <option value="5">5 Meses</option>
+                            <option value="6">6 Meses</option>                  
+                            <option value="7">7 Meses</option>                  
+                            <option value="8">8 Meses</option>                  
+                            <option value="9">9 Meses</option>                  
+                            <option value="10">10 Meses</option>                  
+                            <option value="11">11 Meses</option>                  
+                            <option value="12">1 Año</option>                  
+                          </select>    
 
-                      <thead>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <label for="">Interes:</label>
 
-                        <tr>
-                          <th>Impuesto</th>
-                          <th>Total</th>      
-                        </tr>
-
-                      </thead>
-
-                      <tbody>
-                      
-                        <tr>
+                        <select class="form-control" id="interes" name="interes" required>
+                            <option value="">Seleccione el interes </option>
+                            <option value="10">10%</option>
+                            <option value="5">5%</option>                 
+                          </select> 
+                          <!-- <input class="form-control" type="date" id="fechaPlazo" name="fechaPlazo"> -->
                           
-                          <td style="width: 50%">
-                            
-                            <div class="input-group">
-                           
-                              <input type="number" class="form-control input-lg" min="0" id="nuevoImpuestoVenta" name="nuevoImpuestoVenta" placeholder="0" required>
-
-                               <input type="hidden" name="nuevoPrecioImpuesto" id="nuevoPrecioImpuesto" required>
-
-                               <input type="hidden" name="nuevoPrecioNeto" id="nuevoPrecioNeto" required>
-
-                              <span class="input-group-addon"><i class="fa fa-percent"></i></span>
-                        
-                            </div>
-
-                          </td>
-
-                           <td style="width: 50%">
-                            
-                            <div class="input-group">
-                           
-                              <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
-
-                              <input type="text" class="form-control input-lg" id="nuevoTotalVenta" name="nuevoTotalVenta" total="" placeholder="00000" required>
-
-                              <input type="hidden" name="totalVenta" id="totalVenta">
-                              
-                        
-                            </div>
-
-                          </td>
-
-                        </tr>
-
-                      </tbody>
-
-                    </table>
+                      </div>
+                    
 
                   </div>
 
-                </div>
+                  <hr>
 
-                <hr>
-
-                <!--=====================================
-                ENTRADA MÉTODO DE PAGO
-                ======================================-->
-
-                <div class="form-group row">
-                  
-                  <div class="col-xs-6" style="padding-right:0px">
+                  <div class="col-xs-12 col-lg-12 ">
                     
-                     <div class="input-group">
-                  
-                      <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago" required>
-                        <option value="">Seleccione método de pago</option>
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="Consignacion">Consignación</option>
-                        <option value="TC">Tarjeta Crédito</option>
-                        <option value="TD">Tarjeta Débito</option>                  
-                      </select>    
+                      <div class="form-group col-lg-6">
+                        
+                        <div class="input-group">
+
+                        <label for="">Forma de pago:</label>
+                      
+                          <select class="form-control" id="formaPago" name="formaPago" required>
+                            <option value="">Seleccione la forma de pago</option>
+                            <option value="diario">Diario</option>
+                            <option value="semanal">Semanal</option>
+                            <option value="quincenal">Quincenal</option>
+                            <option value="mensual">Mensual</option>                  
+                          </select>    
+
+                        </div>
+
+                        
+                    </div>
+                    <div class="col-lg-6">
+                      <label for="">Fecha de inicio:</label>
+                      <input class="form-control" type="date" id="fechaPrestamo" name="fechaPrestamo">
 
                     </div>
 
                   </div>
 
-                  <div class="cajasMetodoPago"></div>
-
-                  <input type="hidden" id="listaMetodoPago" name="listaMetodoPago">
-
                 </div>
-
-                <br>
       
               </div>
 
@@ -277,7 +269,7 @@ if($_SESSION["perfil"] == "Especial"){
 
           <div class="box-footer">
 
-            <button type="submit" class="btn btn-primary pull-right">Guardar venta</button>
+            <button type="submit" class="btn btn-primary pull-right">Guardar prestamo</button>
 
           </div>
 
@@ -285,49 +277,13 @@ if($_SESSION["perfil"] == "Especial"){
 
         <?php
 
-          $guardarVenta = new ControladorVentas();
-          $guardarVenta -> ctrCrearVenta();
+          $guardarVenta = new ControladorPrestamos();
+          $guardarVenta -> ctrCrearPrestamo();
           
         ?>
 
         </div>
             
-      </div>
-
-      <!--=====================================
-      LA TABLA DE PRODUCTOS
-      ======================================-->
-
-      <div class="col-lg-7 hidden-md hidden-sm hidden-xs">
-        
-        <div class="box box-warning">
-
-          <div class="box-header with-border"></div>
-
-          <div class="box-body">
-            
-            <table class="table table-bordered table-striped dt-responsive tablaVentas">
-              
-               <thead>
-
-                 <tr>
-                  <th style="width: 10px">#</th>
-                  <th>Imagen</th>
-                  <th>Código</th>
-                  <th>Descripcion</th>
-                  <th>Stock</th>
-                  <th>Acciones</th>
-                </tr>
-
-              </thead>
-
-            </table>
-
-          </div>
-
-        </div>
-
-
       </div>
 
     </div>

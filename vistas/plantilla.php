@@ -138,12 +138,12 @@ CUERPO DOCUMENTO
 
       if($_GET["ruta"] == "inicio" ||
          $_GET["ruta"] == "usuarios" ||
-         $_GET["ruta"] == "categorias" ||
-         $_GET["ruta"] == "productos" ||
+         $_GET["ruta"] == "abonos" ||
+         $_GET["ruta"] == "cobros" ||
          $_GET["ruta"] == "clientes" ||
-         $_GET["ruta"] == "ventas" ||
-         $_GET["ruta"] == "crear-venta" ||
-         $_GET["ruta"] == "editar-venta" ||
+         $_GET["ruta"] == "prestamos" ||
+         $_GET["ruta"] == "crear-prestamo" ||
+         $_GET["ruta"] == "editar-prestamo" ||
          $_GET["ruta"] == "reportes" ||
          $_GET["ruta"] == "salir"){
 
@@ -180,10 +180,10 @@ CUERPO DOCUMENTO
 
 <script src="vistas/js/plantilla.js"></script>
 <script src="vistas/js/usuarios.js"></script>
-<script src="vistas/js/categorias.js"></script>
-<script src="vistas/js/productos.js"></script>
+<script src="vistas/js/abonos.js"></script>
+<script src="vistas/js/cobros.js"></script>
 <script src="vistas/js/clientes.js"></script>
-<script src="vistas/js/ventas.js"></script>
+<script src="vistas/js/prestamos.js"></script>
 <script src="vistas/js/reportes.js"></script>
 
 </body>

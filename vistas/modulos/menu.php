@@ -36,10 +36,10 @@
 
 			echo '<li>
 
-				<a href="categorias">
+				<a href="abonos">
 
 					<i class="fa fa-th"></i>
-					<span>Categorías</span>
+					<span>Abonos</span>
 
 				</a>
 
@@ -47,10 +47,10 @@
 
 			<li>
 
-				<a href="productos">
+				<a href="cobros">
 
 					<i class="fa fa-product-hunt"></i>
-					<span>Productos</span>
+					<span>Cobros</span>
 
 				</a>
 
@@ -95,7 +95,7 @@
 					
 					<li>
 
-						<a href="ventas">
+						<a href="prestamos">
 							
 							<i class="fa fa-circle-o"></i>
 							<span>Administrar Prestamos</span>
@@ -106,7 +106,7 @@
 
 					<li>
 
-						<a href="crear-venta">
+						<a href="crear-prestamo">
 							
 							<i class="fa fa-circle-o"></i>
 							<span>Crear Prestamo</span>

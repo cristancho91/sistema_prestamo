@@ -2,17 +2,17 @@
 
 require_once "conexion.php";
 
-class ModeloVentas{
+class ModeloPrestamos{
 
 	/*=============================================
 	MOSTRAR VENTAS
 	=============================================*/
 
-	static public function mdlMostrarVentas($tabla, $item, $valor){
+	static public function mdlMostrarPrestamos($tabla, $item, $valor){
 
 		if($item != null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item ORDER BY id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item ORDER BY id_prestamo ASC");
 
 			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
 
@@ -22,7 +22,7 @@ class ModeloVentas{
 
 		}else{
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY id_prestamo ASC");
 
 			$stmt -> execute();
 
@@ -35,22 +35,23 @@ class ModeloVentas{
 	}
 
 	/*=============================================
-	REGISTRO DE VENTA
+	REGISTRO DE PRESTAMO
 	=============================================*/
 
-	static public function mdlIngresarVenta($tabla, $datos){
+	static public function mdlIngresarPrestamo($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(codigo, id_cliente, id_vendedor, productos, impuesto, neto, total,ganancia_venta, metodo_pago) VALUES (:codigo, :id_cliente, :id_vendedor, :productos, :impuesto, :neto, :total,:ganancia_venta, :metodo_pago)");
+		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_cliente,  id_prestador,codigo_prestamo, monto, tasa_interes, fecha_prestamo, tiempo_en_meses,forma_pago,saldo_pendiente, estado_prestamo) VALUES ( :id_cliente, :id_prestador,:codigo_prestamo, :monto, :tasa_interes, :fecha_prestamo, :tiempo_en_meses,:forma_pago, :saldo_pendiente, :estado_prestamo)");
 
-		$stmt->bindParam(":codigo", $datos["codigo"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_cliente", $datos["id_cliente"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_vendedor", $datos["id_vendedor"], PDO::PARAM_INT);
-		$stmt->bindParam(":productos", $datos["productos"], PDO::PARAM_STR);
-		$stmt->bindParam(":impuesto", $datos["impuesto"], PDO::PARAM_STR);
-		$stmt->bindParam(":neto", $datos["neto"], PDO::PARAM_STR);
-		$stmt->bindParam(":total", $datos["total"], PDO::PARAM_STR);
-		$stmt->bindParam(":ganancia_venta", $datos["ganancia_venta"], PDO::PARAM_INT);
-		$stmt->bindParam(":metodo_pago", $datos["metodo_pago"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_prestador", $datos["id_vendedor"], PDO::PARAM_INT);
+		$stmt->bindParam(":codigo_prestamo", $datos["codigo"], PDO::PARAM_STR);
+		$stmt->bindParam(":monto", $datos["nuevoPrestamo"], PDO::PARAM_INT);
+		$stmt->bindParam(":tasa_interes", $datos["interes"], PDO::PARAM_INT);
+		$stmt->bindParam(":fecha_prestamo", $datos["fechaPrestamo"], PDO::PARAM_STR);
+		$stmt->bindParam(":tiempo_en_meses", $datos["nuevoMetodoPago"], PDO::PARAM_INT);
+		$stmt->bindParam(":forma_pago", $datos["formaPago"], PDO::PARAM_STR);
+		$stmt->bindParam(":saldo_pendiente", $datos["saldo_pendiente"], PDO::PARAM_INT);
+		$stmt->bindParam(":estado_prestamo", $datos["estado"], PDO::PARAM_INT);
 
 		if($stmt->execute()){
 
@@ -69,7 +70,7 @@ class ModeloVentas{
 	EDITAR VENTA
 	=============================================*/
 
-	static public function mdlEditarVenta($tabla, $datos){
+	static public function mdlEditarPrestamo($tabla, $datos){
 
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET  id_cliente = :id_cliente, id_vendedor = :id_vendedor, productos = :productos, impuesto = :impuesto, neto = :neto, total= :total, metodo_pago = :metodo_pago WHERE codigo = :codigo");
 
@@ -99,7 +100,7 @@ class ModeloVentas{
 	ELIMINAR VENTA
 	=============================================*/
 
-	static public function mdlEliminarVenta($tabla, $datos){
+	static public function mdlEliminarPrestamo($tabla, $datos){
 
 		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id = :id");
 
@@ -123,11 +124,11 @@ class ModeloVentas{
 	RANGO FECHAS
 	=============================================*/	
 
-	static public function mdlRangoFechasVentas($tabla, $fechaInicial, $fechaFinal){
+	static public function mdlRangoFechasPrestamos($tabla, $fechaInicial, $fechaFinal){
 
 		if($fechaInicial == null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY id ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id  ORDER BY id_prestamo ASC");
 
 			$stmt -> execute();
 
@@ -172,12 +173,14 @@ class ModeloVentas{
 	}
 
 	/*=============================================
-	SUMAR EL TOTAL DE VENTAS
+	SUMAR EL TOTAL DE PRESTAMOS
 	=============================================*/
 
-	static public function mdlSumaTotalVentas($tabla){	
+	static public function mdlSumaTotalPrestamos($tabla,$item,$valor){	
 
-		$stmt = Conexion::conectar()->prepare("SELECT SUM(neto) as total FROM $tabla");
+		$stmt = Conexion::conectar()->prepare("SELECT SUM(id_prestamo) as prestamos_cliente FROM $tabla WHERE id_cliente = :$item");
+
+		$stmt -> bindParam(":".$item, $valor, PDO::PARAM_INT);
 
 		$stmt -> execute();
 

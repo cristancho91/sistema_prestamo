@@ -28,8 +28,6 @@ class ModeloClientes{
 			return "error";
 		
 		}
-
-		$stmt->close();
 		$stmt = null;
 
 	}
@@ -60,8 +58,6 @@ class ModeloClientes{
 
 		}
 
-		$stmt -> close();
-
 		$stmt = null;
 
 	}
@@ -91,8 +87,6 @@ class ModeloClientes{
 			return "error";
 		
 		}
-
-		$stmt->close();
 		$stmt = null;
 
 	}
@@ -116,8 +110,6 @@ class ModeloClientes{
 			return "error";	
 
 		}
-
-		$stmt -> close();
 
 		$stmt = null;
 
@@ -143,8 +135,6 @@ class ModeloClientes{
 			return "error";	
 
 		}
-
-		$stmt -> close();
 
 		$stmt = null;
 

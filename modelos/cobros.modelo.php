@@ -2,13 +2,13 @@
 
 require_once "conexion.php";
 
-class ModeloProductos{
+class ModeloCobros{
 
 	/*=============================================
 	MOSTRAR PRODUCTOS
 	=============================================*/
 
-	static public function mdlMostrarProductos($tabla, $item, $valor, $orden){
+	static public function mdlMostrarCobros($tabla, $item, $valor, $orden){
 
 		if($item != null){
 
@@ -120,7 +120,7 @@ class ModeloProductos{
 	ACTUALIZAR PRODUCTO
 	=============================================*/
 
-	static public function mdlActualizarProducto($tabla, $item1, $valor1, $valor){
+	static public function mdlActualizarCobro($tabla, $item1, $valor1, $valor){
 
 		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET $item1 = :$item1 WHERE id = :id");
 
