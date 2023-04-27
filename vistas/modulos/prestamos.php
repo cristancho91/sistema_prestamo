@@ -39,7 +39,7 @@ if($_SESSION["perfil"] == "Especial"){
 
       <div class="box-header with-border">
   
-        <a href="crear-venta">
+        <a href="crear-prestamo">
 
           <button class="btn btn-primary">
             
@@ -72,10 +72,10 @@ if($_SESSION["perfil"] == "Especial"){
            <th style="width:10px">#</th>
            <th>Código</th>
            <th>Nombre cliente</th>
-           <th>Nombre Prestamista</th>
+           <!-- <th>Nombre Prestamista</th> -->
            <th>Prestamo</th>
            <th>Interés</th>
-           <th>Tiempo(meses)</th>
+           <th>Tiempo (meses)</th>
            <th>Forma de pago</th> 
            <th>Saldo Pendiente</th> 
            <th>Estado Prestamo</th> 
@@ -126,20 +126,17 @@ if($_SESSION["perfil"] == "Especial"){
 
                   // echo '<td>'.$respuestaUsuario["nombre"].'</td>
                   echo '
-                  <td>'.$value["nombre_usuario"].'</td>
-                  <td>$ '.number_format($value["monto"],2).'</td>
+                  <td>$ '.number_format($value["monto"],0).'</td>
 
                   <td>'.number_format($value["tasa_interes"],0).'%</td>
                   <td>'.$value["tiempo_en_meses"].'</td>
                   <td>'.$value["forma_pago"].'</td>
-                  <td>$ '.number_format($value["saldo_pendiente"],2).'</td>';
+                  <td>$ '.number_format($value["saldo_pendiente"],0).'</td>';
 
                   if($value["estado_prestamo"]){
-                    echo '<td><div class="alert alert-success" role="alert">activo
-                      </div></td>';
+                    echo '<td class="alert alert-success" role="alert" >Activo</td>';
                   }else{
-                    echo '<td><div class="alert alert-danger" role="alert">pagado
-                      </div></td>';
+                    echo '<td class="alert alert-warning" role="alert">Pagado</td>';
                   }
 
                   echo '
@@ -149,6 +146,18 @@ if($_SESSION["perfil"] == "Especial"){
                   <td>
 
                     <div class="btn-group">
+
+                      <button class="btn btn-success btnCuotas" codigoPrestamo="'.$value["id_prestamo"].'">
+
+                      <i class="fa fa-tasks"></i>
+
+                      </button>
+
+                      <button class="btn btn-primary btnCancelarPrestamo" codigoPrestamo="'.$value["id_prestamo"].'">
+
+                      <i class="fa fa-money"></i>
+
+                      </button>
                         
                       <button class="btn btn-info btnImprimirFactura" codigoPrestamo="'.$value["codigo_prestamo"].'">
 

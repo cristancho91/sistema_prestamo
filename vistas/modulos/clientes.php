@@ -63,8 +63,8 @@ if($_SESSION["perfil"] == "Especial"){
            <th>Teléfono</th>
            <th>Dirección</th>
            <th>Fecha nacimiento</th> 
-           <th>Total compras</th>
-           <th>Última compra</th>
+           <th>Total prestamos</th>
+           <!-- <th>Última compra</th> -->
            <th>Ingreso al sistema</th>
            <th>Acciones</th>
 
@@ -81,8 +81,12 @@ if($_SESSION["perfil"] == "Especial"){
 
           $clientes = ControladorClientes::ctrMostrarClientes($item, $valor);
 
+          $itemPrestamo = "id_cliente";
+
+          
+
           foreach ($clientes as $key => $value) {
-            
+
 
             echo '<tr>
 
@@ -101,8 +105,6 @@ if($_SESSION["perfil"] == "Especial"){
                     <td>'.$value["fecha_nacimiento"].'</td>             
 
                     <td>'.$value["compras"].'</td>
-
-                    <td>'.$value["ultima_compra"].'</td>
 
                     <td>'.$value["fecha"].'</td>
 

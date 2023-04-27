@@ -87,22 +87,22 @@ if($_SESSION["perfil"] == "Especial"){
                     $item = null;
                     $valor = null;
 
-                    $ventas = ControladorPrestamos::ctrMostrarPrestamos($item, $valor);
+                    $prestamo = ControladorPrestamos::ctrMostrarPrestamos($item, $valor);
 
-                    if(!$ventas){
+                    if(!$prestamo){
 
                       echo '<input type="text" class="form-control" id="codigoPrestamo" name="codigoPrestamo" value="10001" readonly>';
                   
 
                     }else{
 
-                      foreach ($ventas as $key => $value) {
+                      foreach ($prestamo as $key => $value) {
                         
                         
                       
                       }
 
-                      $codigo = $value["id_prestamo"] + 1;
+                      $codigo = $value["codigo_prestamo"] + 1;
 
 
 
@@ -200,18 +200,18 @@ if($_SESSION["perfil"] == "Especial"){
                           <label for="">Plazo:</label>
                           <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago" required>
                             <option value="">Seleccione el plazo </option>
-                            <option value="1">1 mes</option>
-                            <option value="2">2 meses</option>
-                            <option value="3">3 Meses</option>
-                            <option value="4">4 Meses</option>
-                            <option value="5">5 Meses</option>
-                            <option value="6">6 Meses</option>                  
-                            <option value="7">7 Meses</option>                  
-                            <option value="8">8 Meses</option>                  
-                            <option value="9">9 Meses</option>                  
-                            <option value="10">10 Meses</option>                  
-                            <option value="11">11 Meses</option>                  
-                            <option value="12">1 Año</option>                  
+                            <?php 
+
+                              for ($i=1; $i <= 12 ; $i++) { 
+                                if($i == 12){
+                                  echo '<option value="'.$i.'">1 año</option>'; 
+
+                                }else{
+                                  echo '<option value="'.$i.'">'.$i.' meses</option>'; 
+                                }
+                              }
+                            
+                            ?>
                           </select>    
 
                         </div>
@@ -255,7 +255,7 @@ if($_SESSION["perfil"] == "Especial"){
                     </div>
                     <div class="col-lg-6">
                       <label for="">Fecha de inicio:</label>
-                      <input class="form-control" type="date" id="fechaPrestamo" name="fechaPrestamo">
+                      <input class="form-control" type="date" id="fechaPrestamo" name="fechaPrestamo" required>
 
                     </div>
 

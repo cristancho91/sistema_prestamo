@@ -1,18 +1,34 @@
+<?php
+
+if($_SESSION["perfil"] == "Especial"){
+
+  echo '<script>
+
+    window.location = "inicio";
+
+  </script>';
+
+  return;
+
+}
+
+?>
+
 <div class="content-wrapper">
 
   <section class="content-header">
     
     <h1>
       
-      Editar venta
+      Editar prestamo
     
     </h1>
 
     <ol class="breadcrumb">
       
-      <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
+      <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
       
-      <li class="active">Crear venta</li>
+      <li class="active">Editar prestamo</li>
     
     </ol>
 
@@ -40,22 +56,20 @@
 
                 <?php
 
-                    $item = "id";
-                    $valor = $_GET["idVenta"];
+                  $item = "id_prestamo";
+                  $valor = $_GET["idPrestamo"];
 
-                    $venta = ControladorVentas::ctrMostrarVentas($item, $valor);
+                  $prestamo = ControladorPrestamos::ctrMostrarPrestamos($item, $valor);
 
-                    $itemUsuario = "id";
-                    $valorUsuario = $venta["id_vendedor"];
+                  $itemUsuario = "id";
+                  $valorUsuario = $prestamo["id_prestador"];
 
-                    $vendedor = ControladorUsuarios::ctrMostrarUsuarios($itemUsuario, $valorUsuario);
+                  $vendedor = ControladorUsuarios::ctrMostrarUsuarios($itemUsuario, $valorUsuario);
 
-                    $itemCliente = "id";
-                    $valorCliente = $venta["id_cliente"];
+                  $itemCliente = "id";
+                  $valorCliente = $prestamo["id_cliente"];
 
-                    $cliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
-
-                    $porcentajeImpuesto = $venta["impuesto"] * 100 / $venta["neto"];
+                  $cliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
 
 
                 ?>
@@ -84,11 +98,11 @@
 
                 <div class="form-group">
                   
-                  <div class="input-group">
+                <div class="input-group">
                     
                     <span class="input-group-addon"><i class="fa fa-key"></i></span>
 
-                   <input type="text" class="form-control" id="nuevaVenta" name="editarVenta" value="<?php echo $venta["codigo"]; ?>" readonly>
+                   <input type="text" class="form-control" id="nuevoPrestamo" name="nuevoPrestamo" value="<?php echo $prestamo["codigo_prestamo"]; ?>" readonly>
                
                   </div>
                 
@@ -132,169 +146,109 @@
                 </div>
 
                 <!--=====================================
-                ENTRADA PARA AGREGAR PRODUCTO
-                ======================================--> 
+                ENTRADA PARA AGREGAR prestamo
+                ======================================-->
+                <div class="input-group">
+      
+                  <span class="input-group-addon"><i class="fa fa-money"></i></span>
 
-                <div class="form-group row nuevoProducto">
-
-                <?php
-
-                $listaProducto = json_decode($venta["productos"], true);
-
-                foreach ($listaProducto as $key => $value) {
-
-                  $item = "id";
-                  $valor = $value["id"];
-                  $orden = "id";
-
-                  $respuesta = ControladorProductos::ctrMostrarProductos($item, $valor, $orden);
-
-                  $stockAntiguo = $respuesta["stock"] + $value["cantidad"];
-                  
-                  echo '<div class="row" style="padding:5px 15px">
-            
-                        <div class="col-xs-6" style="padding-right:0px">
-            
-                          <div class="input-group">
-                
-                            <span class="input-group-addon"><button type="button" class="btn btn-danger btn-xs quitarProducto" idProducto="'.$value["id"].'"><i class="fa fa-times"></i></button></span>
-
-                            <input type="text" class="form-control nuevaDescripcionProducto" idProducto="'.$value["id"].'" name="agregarProducto" value="'.$value["descripcion"].'" readonly required>
-
-                          </div>
-
-                        </div>
-
-                        <div class="col-xs-3">
-              
-                          <input type="number" class="form-control nuevaCantidadProducto" name="nuevaCantidadProducto" min="1" value="'.$value["cantidad"].'" stock="'.$stockAntiguo.'" nuevoStock="'.$value["stock"].'" required>
-
-                        </div>
-
-                        <div class="col-xs-3 ingresoPrecio" style="padding-left:0px">
-
-                          <div class="input-group">
-
-                            <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
-                   
-                            <input type="text" class="form-control nuevoPrecioProducto" precioReal="'.$respuesta["precio_venta"].'" name="nuevoPrecioProducto" value="'.$value["total"].'" readonly required>
-   
-                          </div>
-               
-                        </div>
-
-                      </div>';
-                }
-
-
-                ?>
+                  <input type ="number" class="form-control editarMonto"  name="editarMonto" value="<?php echo $prestamo["monto"];?>" placeholder="introduce la cantidad a prestar..."  required>
 
                 </div>
 
-                <input type="hidden" id="listaProductos" name="listaProductos">
-
-                <!--=====================================
-                BOTÓN PARA AGREGAR PRODUCTO
-                ======================================-->
-
-                <button type="button" class="btn btn-default hidden-lg btnAgregarProducto">Agregar producto</button>
-
-                <hr>
+                <hr> 
 
                 <div class="row">
 
                   <!--=====================================
-                  ENTRADA IMPUESTOS Y TOTAL
+                  ENTRADAS
                   ======================================-->
                   
-                  <div class="col-xs-8 pull-right">
+                  <div class="col-xs-12 col-lg-12 ">
                     
-                    <table class="table">
-
-                      <thead>
-
-                        <tr>
-                          <th>Impuesto</th>
-                          <th>Total</th>      
-                        </tr>
-
-                      </thead>
-
-                      <tbody>
-                      
-                        <tr>
+                      <div class="form-group col-lg-6">
+                        
+                        <div class="input-group">
+                          <label for="">Plazo:</label>
+                          <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago" required>
                           
-                          <td style="width: 50%">
-                            
-                            <div class="input-group">
-                           
-                              <input type="number" class="form-control input-lg" min="0" id="nuevoImpuestoVenta" name="nuevoImpuestoVenta" value="<?php echo $porcentajeImpuesto; ?>" required>
 
-                               <input type="hidden" name="nuevoPrecioImpuesto" id="nuevoPrecioImpuesto" value="<?php echo $venta["impuesto"]; ?>" required>
+                          <?php 
+                          if($prestamo["tiempo_en_meses"] == 12){
+                            echo '<option value="'.$prestamo["tiempo_en_meses"].'">1 año</option>';
+                          }else{
+                            echo '<option value="'.$prestamo["tiempo_en_meses"].'">'.$prestamo["tiempo_en_meses"].' meses</option>';
+                          }
 
-                               <input type="hidden" name="nuevoPrecioNeto" id="nuevoPrecioNeto" value="<?php echo $venta["neto"]; ?>" required>
+                          
 
-                              <span class="input-group-addon"><i class="fa fa-percent"></i></span>
-                        
-                            </div>
+                          for ($i=1; $i <= 12 ; $i++) { 
+                            if($i == 12){
+                              echo '<option value="'.$i.'">1 año</option>'; 
 
-                          </td>
+                            }else{
+                              echo '<option value="'.$i.'">'.$i.' meses</option>'; 
+                            }
+                          }
 
-                           <td style="width: 50%">
-                            
-                            <div class="input-group">
-                           
-                              <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
+                          ?>                  
+                          </select>    
 
-                              <input type="text" class="form-control input-lg" id="nuevoTotalVenta" name="nuevoTotalVenta" total="<?php echo $venta["neto"]; ?>"  value="<?php echo $venta["total"]; ?>" readonly required>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <label for="">Interes:</label>
 
-                              <input type="hidden" name="totalVenta" value="<?php echo $venta["total"]; ?>" id="totalVenta">
-                              
-                        
-                            </div>
+                        <select class="form-control" id="interes" name="interes" required>
+                        <?php
+                              echo '<option value="'.$prestamo["tasa_interes"].'">'.$prestamo["tasa_interes"].'%</option>';
 
-                          </td>
-
-                        </tr>
-
-                      </tbody>
-
-                    </table>
+                            ?>
+                            <option value="10">10%</option>
+                            <option value="5">5%</option>                 
+                          </select> 
+                          <!-- <input class="form-control" type="date" id="fechaPlazo" name="fechaPlazo"> -->
+                          
+                      </div>
+                    
 
                   </div>
 
-                </div>
+                  <hr>
 
-                <hr>
-
-                <!--=====================================
-                ENTRADA MÉTODO DE PAGO
-                ======================================-->
-
-                <div class="form-group row">
-                  
-                  <div class="col-xs-6" style="padding-right:0px">
+                  <div class="col-xs-12 col-lg-12 ">
                     
-                     <div class="input-group">
-                  
-                      <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago" required>
-                        <option value="">Seleccione método de pago</option>
-                        <option value="Efectivo">Efectivo</option>
-                        <option value="TC">Tarjeta Crédito</option>
-                        <option value="TD">Tarjeta Débito</option>                  
-                      </select>    
+                      <div class="form-group col-lg-6">
+                        
+                        <div class="input-group">
+
+                        <label for="">Forma de pago:</label>
+                      
+                          <select class="form-control" id="formaPago" name="formaPago" required>
+                            <?php
+                              echo '<option value="'.$prestamo["forma_pago"].'">'.strtoupper($prestamo["forma_pago"]).'</option>';
+
+                            ?>
+                            
+                            <option value="diario">DIARIO</option>
+                            <option value="semanal">SEMANAL</option>
+                            <option value="quincenal">QUINCENAL</option>
+                            <option value="mensual">MENSUAL</option>                  
+                          </select>    
+
+                        </div>
+
+                        
+                    </div>
+                    <div class="col-lg-6">
+                      <label for="">Fecha de inicio:</label>
+                      <input class="form-control" type="date" id="fechaPrestamo" name="fechaPrestamo" value="<?php echo $prestamo["fecha_prestamo"];  ?>" required>
 
                     </div>
 
                   </div>
 
-                  <div class="cajasMetodoPago"></div>
-
-                  <input type="hidden" id="listaMetodoPago" name="listaMetodoPago">
-
                 </div>
-
-                <br>
       
               </div>
 
@@ -302,7 +256,7 @@
 
           <div class="box-footer">
 
-            <button type="submit" class="btn btn-primary pull-right">Guardar cambios</button>
+            <button type="submit" class="btn btn-primary pull-right">Guardar Cambios</button>
 
           </div>
 
@@ -310,49 +264,13 @@
 
         <?php
 
-          $editarVenta = new ControladorVentas();
-          $editarVenta -> ctrEditarVenta();
+          $guardarPrestamoEditado = new ControladorPrestamos();
+          $guardarPrestamoEditado -> ctrEditarPrestamo();
           
         ?>
 
         </div>
             
-      </div>
-
-      <!--=====================================
-      LA TABLA DE PRODUCTOS
-      ======================================-->
-
-      <div class="col-lg-7 hidden-md hidden-sm hidden-xs">
-        
-        <div class="box box-warning">
-
-          <div class="box-header with-border"></div>
-
-          <div class="box-body">
-            
-            <table class="table table-bordered table-striped dt-responsive tablaVentas">
-              
-               <thead>
-
-                 <tr>
-                  <th style="width: 10px">#</th>
-                  <th>Imagen</th>
-                  <th>Código</th>
-                  <th>Descripcion</th>
-                  <th>Stock</th>
-                  <th>Acciones</th>
-                </tr>
-
-              </thead>
-
-            </table>
-
-          </div>
-
-        </div>
-
-
       </div>
 
     </div>

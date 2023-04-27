@@ -100,7 +100,9 @@ class ControladorPrestamos{
 						   "saldo_pendiente"=>$_POST["nuevoPrestamo"],
 						   "formaPago"=>$_POST["formaPago"],
 						   "estado"=>$estado,
-						   "fechaPrestamo"=>$_POST["fechaPrestamo"]);
+						   "fechaPrestamo"=>$_POST["fechaPrestamo"],
+							"cantidadCompra" => $traerCliente["compras"]);
+
 
 			$respuesta = ModeloPrestamos::mdlIngresarPrestamo($tabla, $datos);
 
@@ -572,13 +574,30 @@ class ControladorPrestamos{
 	SUMA TOTAL prestamos
 	=============================================*/
 
-	static public function ctrSumaTotalPrestamos($tabla, $item,$valor){
+	static public function ctrSumaTotalPrestamos($item,$valor){
 
-
+		$tabla = "prestamos";
 		$respuesta = ModeloPrestamos::mdlSumaTotalPrestamos($tabla,$item,$valor);
 
 		return $respuesta;
 
+	}
+
+	/*=============================================
+	CONTAR LA CANTIDAD DE PRESTAMOS POR CLIENTE Y TOTAL DE PRESTAMOS
+	=============================================*/
+	static public function ctrContarPrestamos($item,$valor){
+		$tabla = "prestamos";
+		$respuesta = ModeloPrestamos::mdlContarPrestamos($tabla,$item,$valor);
+		return $respuesta;
+	}
+
+	/*=============================================
+	CONTAR LA CANTIDAD DE PRESTAMOS ACTIVOS
+	=============================================*/
+	static public function ctrContarPrestamosActivos($tabla){
+		$respuesta = ModeloPrestamos::mdlContarPrestamosActivos($tabla);
+		return $respuesta;
 	}
 
 }

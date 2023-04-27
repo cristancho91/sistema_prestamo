@@ -685,13 +685,13 @@ function listarMetodos(){
 }
 
 /*=============================================
-BOTON EDITAR VENTA
+BOTON EDITAR PRESTAMO
 =============================================*/
-$(".tablas").on("click", ".btnEditarVenta", function(){
+$(".tablas").on("click", ".btnEditarPrestamo", function(){
 
-	var idVenta = $(this).attr("idVenta");
+	let idPrestamo = $(this).attr("idPrestamo");
 
-	window.location = "index.php?ruta=editar-venta&idVenta="+idVenta;
+	window.location = "index.php?ruta=editar-prestamo&idPrestamo="+idPrestamo;
 
 
 })
