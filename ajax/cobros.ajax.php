@@ -8,23 +8,6 @@ require_once "../modelos/abonos.modelo.php";
 
 class AjaxProductos{
 
-  /*=============================================
-  GENERAR CÓDIGO A PARTIR DE ID CATEGORIA
-  =============================================*/
-  public $idCategoria;
-
-  public function ajaxCrearCodigoProducto(){
-
-  	$item = "id_categoria";
-  	$valor = $this->idCategoria;
-    $orden = "id";
-
-  	$respuesta = ControladorProductos::ctrMostrarProductos($item, $valor, $orden);
-
-  	echo json_encode($respuesta);
-
-  }
-
 
   /*=============================================
   EDITAR PRODUCTO
@@ -77,17 +60,6 @@ class AjaxProductos{
 }
 
 
-/*=============================================
-GENERAR CÓDIGO A PARTIR DE ID CATEGORIA
-=============================================*/	
-
-if(isset($_POST["idCategoria"])){
-
-	$codigoProducto = new AjaxProductos();
-	$codigoProducto -> idCategoria = $_POST["idCategoria"];
-	$codigoProducto -> ajaxCrearCodigoProducto();
-
-}
 /*=============================================
 EDITAR PRODUCTO
 =============================================*/ 

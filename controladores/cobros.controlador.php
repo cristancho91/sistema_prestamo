@@ -1,16 +1,16 @@
 <?php
 
-class ControladorProductos{
+class ControladorCobros{
 
 	/*=============================================
 	MOSTRAR PRODUCTOS
 	=============================================*/
 
-	static public function ctrMostrarProductos($item, $valor, $orden){
+	static public function ctrMostrarCobros($item, $valor, $orden){
 
-		$tabla = "productos";
+		$tabla = "cuotas";
 
-		$respuesta = ModeloProductos::mdlMostrarProductos($tabla, $item, $valor, $orden);
+		$respuesta = ModeloCobros::mdlMostrarCobros($tabla, $item, $valor, $orden);
 
 		return $respuesta;
 
@@ -20,7 +20,7 @@ class ControladorProductos{
 	CREAR PRODUCTO
 	=============================================*/
 
-	static public function ctrCrearProducto(){
+	static public function ctrCrearCobro(){
 
 		if(isset($_POST["nuevaDescripcion"])){
 
@@ -106,7 +106,7 @@ class ControladorProductos{
 							   "precio_venta" => $_POST["nuevoPrecioVenta"],
 							   "imagen" => $ruta);
 
-				$respuesta = ModeloProductos::mdlIngresarProducto($tabla, $datos);
+				$respuesta = ModeloCobros::mdlIngresarCobro($tabla, $datos);
 
 				if($respuesta == "ok"){
 
@@ -157,7 +157,7 @@ class ControladorProductos{
 	EDITAR PRODUCTO
 	=============================================*/
 
-	static public function ctrEditarProducto(){
+	static public function ctrEditarCobro(){
 
 		if(isset($_POST["editarDescripcion"])){
 
@@ -255,7 +255,7 @@ class ControladorProductos{
 							   "precio_venta" => $_POST["editarPrecioVenta"],
 							   "imagen" => $ruta);
 
-				$respuesta = ModeloProductos::mdlEditarProducto($tabla, $datos);
+				$respuesta = ModeloCobros::mdlEditarCobro($tabla, $datos);
 
 				if($respuesta == "ok"){
 
@@ -305,7 +305,7 @@ class ControladorProductos{
 	/*=============================================
 	BORRAR PRODUCTO
 	=============================================*/
-	static public function ctrEliminarProducto(){
+	static public function ctrEliminarCobro(){
 
 		if(isset($_GET["idProducto"])){
 
@@ -319,7 +319,7 @@ class ControladorProductos{
 
 			}
 
-			$respuesta = ModeloProductos::mdlEliminarProducto($tabla, $datos);
+			$respuesta = ModeloCobros::mdlEliminarCobro($tabla, $datos);
 
 			if($respuesta == "ok"){
 
@@ -354,11 +354,24 @@ class ControladorProductos{
 
 		$tabla = "productos";
 
-		$respuesta = ModeloProductos::mdlMostrarSumaVentas($tabla);
+		$respuesta = ModeloCobros::mdlMostrarSumaVentas($tabla);
 
 		return $respuesta;
 
 	}
 
+	/*=============================================
+	RANGO FECHAS CUOTAS
+	=============================================*/	
+
+	static public function ctrRangoFechasCobros($fechaInicial, $fechaFinal){
+
+		$tabla = "cuotas";
+
+		$respuesta = ModeloCobros::mdlRangoFechasCobros($tabla, $fechaInicial, $fechaFinal);
+
+		return $respuesta;
+		
+	}
 
 }

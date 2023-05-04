@@ -174,6 +174,7 @@ CUERPO DOCUMENTO
     include "modulos/login.php";
 
   }
+  
 
   ?>
 
@@ -181,8 +182,8 @@ CUERPO DOCUMENTO
 <script src="vistas/js/plantilla.js"></script>
 <script src="vistas/js/usuarios.js"></script>
 <script src="vistas/js/abonos.js"></script>
-<script src="vistas/js/cobros.js"></script>
 <script src="vistas/js/clientes.js"></script>
+<script src="vistas/js/cobros.js"></script>
 <script src="vistas/js/prestamos.js"></script>
 <script src="vistas/js/reportes.js"></script>
 

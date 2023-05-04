@@ -110,22 +110,8 @@ if($_SESSION["perfil"] == "Especial"){
 
                   <td>'.($key+1).'</td>
                   <td>'.$value["codigo_prestamo"].'</td>
-                  <td>'.$value["nombre_cliente"].'</td>';
+                  <td>'.$value["nombre_cliente"].'</td>
 
-                  // $itemCliente = "id";
-                  // $valorCliente = $value["id_cliente"];
-
-                  // $respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
-
-                  // echo '<td>'.$respuestaCliente["nombre"].'</td>';
-
-                  // $itemUsuario = "id";
-                  // $valorUsuario = $value["id_vendedor"];
-
-                  // $respuestaUsuario = ControladorUsuarios::ctrMostrarUsuarios($itemUsuario, $valorUsuario);
-
-                  // echo '<td>'.$respuestaUsuario["nombre"].'</td>
-                  echo '
                   <td>$ '.number_format($value["monto"],0).'</td>
 
                   <td>'.number_format($value["tasa_interes"],0).'%</td>
@@ -134,9 +120,9 @@ if($_SESSION["perfil"] == "Especial"){
                   <td>$ '.number_format($value["saldo_pendiente"],0).'</td>';
 
                   if($value["estado_prestamo"]){
-                    echo '<td class="alert alert-success" role="alert" >Activo</td>';
+                    echo '<td ><button type="button" class="btn btn-success">Activo</button></td>';
                   }else{
-                    echo '<td class="alert alert-warning" role="alert">Pagado</td>';
+                    echo '<td ><button type="button" class="btn btn-danger">Pagado</button></td>';
                   }
 
                   echo '
