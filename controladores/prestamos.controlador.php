@@ -315,12 +315,12 @@ class ControladorPrestamos{
 
 	static public function ctrEliminarPrestamo(){
 
-		if(isset($_GET["idVenta"])){
+		if(isset($_GET["idPrestamo"])){
 
 			$tabla = "prestamos";
 
-			$item = "id";
-			$valor = $_GET["idVenta"];
+			$item = "id_prestamo";
+			$valor = $_GET["idPrestamo"];
 
 			$traerVenta = ModeloPrestamos::mdlMostrarPrestamos($tabla, $item, $valor);
 
@@ -341,7 +341,7 @@ class ControladorPrestamos{
 				
 				if($value["id_cliente"] == $traerVenta["id_cliente"]){
 
-					array_push($guardarFechas, $value["fecha"]);
+					array_push($guardarFechas, $value["fecha_prestamo"]);
 
 				}
 
@@ -349,10 +349,10 @@ class ControladorPrestamos{
 
 			if(count($guardarFechas) > 1){
 
-				if($traerVenta["fecha"] > $guardarFechas[count($guardarFechas)-2]){
+				if($traerVenta["fecha_prestamo"] > $guardarFechas[count($guardarFechas)]){
 
 					$item = "ultima_compra";
-					$valor = $guardarFechas[count($guardarFechas)-2];
+					$valor = $guardarFechas[count($guardarFechas)];
 					$valorIdCliente = $traerVenta["id_cliente"];
 
 					$comprasCliente = ModeloClientes::mdlActualizarCliente($tablaClientes, $item, $valor, $valorIdCliente);
@@ -379,36 +379,9 @@ class ControladorPrestamos{
 			}
 
 			/*=============================================
-			FORMATEAR TABLA DE PRODUCTOS Y LA DE CLIENTES
+			FORMATEAR TABLA  DE CLIENTES
 			=============================================*/
 
-			$productos =  json_decode($traerVenta["productos"], true);
-
-			$totalProductosComprados = array();
-
-			foreach ($productos as $key => $value) {
-
-				array_push($totalProductosComprados, $value["cantidad"]);
-				
-				$tablaProductos = "cobros";
-
-				$item = "id";
-				$valor = $value["id"];
-				$orden = "id";
-
-				$traerCobros = ModeloCobros::mdlMostrarCobros($tablaProductos, $item, $valor, $orden);
-
-				$item1a = "ventas";
-				$valor1a = $traerCobros["ventas"] - $value["cantidad"];
-
-				$nuevasVentas = ModeloCobros::mdlActualizarCobro($tablaProductos, $item1a, $valor1a, $valor);
-
-				$item1b = "stock";
-				$valor1b = $value["cantidad"] + $traerCobros["stock"];
-
-				$nuevoStock = ModeloCobros::mdlActualizarCobro($tablaProductos, $item1b, $valor1b, $valor);
-
-			}
 
 			$tablaClientes = "clientes";
 
@@ -418,15 +391,24 @@ class ControladorPrestamos{
 			$traerCliente = ModeloClientes::mdlMostrarClientes($tablaClientes, $itemCliente, $valorCliente);
 
 			$item1a = "compras";
-			$valor1a = $traerCliente["compras"] - array_sum($totalProductosComprados);
+			$valor1a = $traerCliente["compras"] - 1;
 
 			$comprasCliente = ModeloClientes::mdlActualizarCliente($tablaClientes, $item1a, $valor1a, $valorCliente);
 
 			/*=============================================
-			ELIMINAR VENTA
+			ELIMINAR CUOTAS
+			=============================================*/
+			
+			$itemCuota = "id_prestamo";
+			$valorCouta = $_GET["idPrestamo"];
+			$traerCouta = ControladorCobros::ctrEliminarCobro($itemCuota, $valorCouta);
+
+
+			/*=============================================
+			ELIMINAR PRESTAMO
 			=============================================*/
 
-			$respuesta = ModeloPrestamos::mdlEliminarPrestamo($tabla, $_GET["idVenta"]);
+			$respuesta = ModeloPrestamos::mdlEliminarPrestamo($tabla, $_GET["idPrestamo"]);
 
 			if($respuesta == "ok"){
 

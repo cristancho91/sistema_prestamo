@@ -49,7 +49,7 @@
 
 				<a href="cobros">
 
-					<i class="fa fa-product-hunt"></i>
+					<i class="fa fa-list-ul"></i>
 					<span>Cobros</span>
 
 				</a>
@@ -79,7 +79,7 @@
 
 				<a href="#">
 
-					<i class="fa fa-list-ul"></i>
+					<i class="fa fa-product-hunt"></i>
 					
 					<span>Prestamos</span>
 					

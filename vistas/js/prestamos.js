@@ -360,25 +360,25 @@ $(document).ready(function() {
 
 
 		/*=============================================
-		BORRAR VENTA
+		BORRAR PRESTAMO
 		=============================================*/
-		$(".tablas").on("click", ".btnEliminarVenta", function(){
+		$(".tablas").on("click", ".btnEliminarPrestamo", function(){
 
-		var idVenta = $(this).attr("idVenta");
+		var idPrestamo = $(this).attr("idPrestamo");
 
 		swal({
-				title: '¿Está seguro de borrar la venta?',
+				title: '¿Está seguro de borrar este prestamo?',
 				text: "¡Si no lo está puede cancelar la accíón!",
 				type: 'warning',
 				showCancelButton: true,
 				confirmButtonColor: '#3085d6',
 				cancelButtonColor: '#d33',
 				cancelButtonText: 'Cancelar',
-				confirmButtonText: 'Si, borrar venta!'
+				confirmButtonText: 'Si, borrar Prestamo!'
 			}).then(function(result){
 				if (result.value) {
 				
-					window.location = "index.php?ruta=ventas&idVenta="+idVenta;
+					window.location = "index.php?ruta=prestamos&idPrestamo="+idPrestamo;
 				}
 
 		})

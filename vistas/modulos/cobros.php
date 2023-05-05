@@ -169,7 +169,7 @@ if($_SESSION["perfil"] == "Vendedor"){
                   <td>$ '.number_format($value["monto_cuota"],0).'</td>
 
                   <td>$ '.number_format($value["interes_a_pagar"],0).'</td>
-                  <td>'.$value["capital_a_pagar"].'</td>
+                  <td>$ '.$value["capital_a_pagar"].'</td>
                   <td>$ '.number_format($value["cantidad_pendiente"],0).'</td>
                   <td>'.$activo.'</td>';
                   
@@ -181,13 +181,13 @@ if($_SESSION["perfil"] == "Vendedor"){
 
                     <div class="btn-group">
 
-                      <button  class="btn btn-success btnCuotas" codigoPrestamo="'.$value["id_cuota"].'">
+                      <button  class="btn btn-success btnPagarCuota" data-toggle="modal" data-target="#modalPagarCuota" id_cuota="'.$value["id_cuota"].'">
 
                       <i class="fa fa-tasks"></i>
 
                       </button>
 
-                      <button class="btn btn-primary btnCancelarPrestamo" codigoPrestamo="'.$value["id_cuota"].'">
+                      <button class="btn btn-primary btnAbonoPrestamo"  id_cuota="'.$value["id_cuota"].'">
 
                       <i class="fa fa-money"></i>
 
@@ -211,6 +211,158 @@ if($_SESSION["perfil"] == "Vendedor"){
       </div>
 
     </div>
+
+    <!--=====================================
+MODAL PAGAR CUOTA
+======================================-->
+
+<div id="modalPagarCuota" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Pagar Cuota</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+            <!-- ENTRADA PARA EL NOMBRE -->
+            
+            <div class="form-group col-lg-6">
+              
+              <div class="input-group">
+                
+              
+                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+
+                <input type="text" class="form-control input-xs" name="nuevoCliente" readonly  required>
+                <input type="hidden" class="form-control input-xs" name="id_prestamo" readonly  required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA EL DOCUMENTO ID -->
+            
+            <div class="form-group col-lg-6">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-key"></i></span> 
+
+                <input type="number" min="0" class="form-control input-xs" name="numCouta" readonly required>
+                <input type="hidden" min="0" class="form-control input-xs" name="id_cuota" readonly required>
+                
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA EL EMAIL -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-envelope"></i></span> 
+
+                <input type="number" min="0" class="form-control input-md" name="cantidad" readonly required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA EL TELÉFONO -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-phone"></i></span> 
+
+                <input type="text" class="form-control input-lg" name="nuevoTelefono" placeholder="Ingresar teléfono" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA LA DIRECCIÓN -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
+
+                <input type="text" class="form-control input-lg" name="nuevaDireccion" placeholder="Ingresar dirección" required>
+
+              </div>
+
+            </div>
+
+             <!-- ENTRADA PARA LA FECHA DE NACIMIENTO -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+
+                <input type="text" class="form-control input-lg" name="nuevaFechaNacimiento" placeholder="Ingresar fecha nacimiento" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required>
+
+              </div>
+
+            </div>
+  
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+          <button type="submit" class="btn btn-primary">Guardar cliente</button>
+
+        </div>
+
+      </form>
+
+      <?php
+
+        $crearCliente = new ControladorClientes();
+        $crearCliente -> ctrCrearCliente();
+
+      ?>
+
+    </div>
+
+  </div>
+
+</div>
+
 
   </section>
 

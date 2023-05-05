@@ -133,12 +133,6 @@ if($_SESSION["perfil"] == "Especial"){
 
                     <div class="btn-group">
 
-                      <button class="btn btn-success btnCuotas" codigoPrestamo="'.$value["id_prestamo"].'">
-
-                      <i class="fa fa-tasks"></i>
-
-                      </button>
-
                       <button class="btn btn-primary btnCancelarPrestamo" codigoPrestamo="'.$value["id_prestamo"].'">
 
                       <i class="fa fa-money"></i>

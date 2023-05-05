@@ -95,9 +95,9 @@ class ModeloCobros{
 	BORRAR PRODUCTO
 	=============================================*/
 
-	static public function mdlEliminarCobro($tabla, $datos){
+	static public function mdlEliminarCobro($tabla,$item, $datos){
 
-		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id = :id");
+		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE $item = :id");
 
 		$stmt -> bindParam(":id", $datos, PDO::PARAM_INT);
 

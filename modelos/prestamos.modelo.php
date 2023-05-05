@@ -205,7 +205,7 @@ class ModeloPrestamos{
 
 	static public function mdlEliminarPrestamo($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id = :id");
+		$stmt = Conexion::conectar()->prepare("DELETE FROM $tabla WHERE id_prestamo = :id");
 
 		$stmt -> bindParam(":id", $datos, PDO::PARAM_INT);
 
