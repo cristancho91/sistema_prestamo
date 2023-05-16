@@ -131,21 +131,25 @@ if($_SESSION["perfil"] == "Especial"){
 
                   <td>
 
-                    <div class="btn-group">
+                    <div class="btn-group">';
 
+                    if($value["estado_prestamo"]){
+                      echo '
                       <button class="btn btn-primary btnCancelarPrestamo" codigoPrestamo="'.$value["id_prestamo"].'">
 
                       <i class="fa fa-money"></i>
 
-                      </button>
-                        
+                      </button>';
+
+                    }
+                        echo '
                       <button class="btn btn-info btnImprimirFactura" codigoPrestamo="'.$value["codigo_prestamo"].'">
 
                         <i class="fa fa-print"></i>
 
                       </button>';
 
-                      if($_SESSION["perfil"] == "Administrador"){
+                      if($_SESSION["perfil"] == "Administrador" && $value["estado_prestamo"]){
 
                       echo '<button class="btn btn-warning btnEditarPrestamo" idPrestamo="'.$value["id_prestamo"].'"><i class="fa fa-pencil"></i></button>
 

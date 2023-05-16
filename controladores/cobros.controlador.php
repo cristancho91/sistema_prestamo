@@ -3,14 +3,14 @@
 class ControladorCobros{
 
 	/*=============================================
-	MOSTRAR PRODUCTOS
+	MOSTRAR CUOTAS
 	=============================================*/
 
-	static public function ctrMostrarCobros($item, $valor, $orden){
+	static public function ctrMostrarCobros($item, $valor){
 
 		$tabla = "cuotas";
 
-		$respuesta = ModeloCobros::mdlMostrarCobros($tabla, $item, $valor, $orden);
+		$respuesta = ModeloCobros::mdlMostrarCobros($tabla, $item, $valor);
 
 		return $respuesta;
 
@@ -22,133 +22,76 @@ class ControladorCobros{
 
 	static public function ctrCrearCobro(){
 
-		if(isset($_POST["nuevaDescripcion"])){
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevaDescripcion"]) &&
-			   preg_match('/^[0-9]+$/', $_POST["nuevoStock"]) &&	
-			   preg_match('/^[0-9.]+$/', $_POST["nuevoPrecioCompra"]) &&
-			   preg_match('/^[0-9.]+$/', $_POST["nuevoPrecioVenta"])){
+		if(isset($_POST["nombreCliente"])){
 
-		   		/*=============================================
-				VALIDAR IMAGEN
-				=============================================*/
+			
+				$nombreCliente = $_POST["nombreCliente"];
+				$numCuota = $_POST["numCouta"];
+				$idPrestamo = $_POST["idPrestamo"];
+				$idCuota = $_POST["id_cuota"];
+				$monto = $_POST["cantidad"];
+				$interes = $_POST["interesPagar"];
+				$capital = $_POST["capitalPagar"];
+				$capitalPendiente = $_POST["capitalPendiente"];
+				$fechaCobro = $_POST["fechaCobro"];
 
-			   	$ruta = "vistas/img/productos/default/anonymous.png";
-
-			   	if(isset($_FILES["nuevaImagen"]["tmp_name"])){
-
-					list($ancho, $alto) = getimagesize($_FILES["nuevaImagen"]["tmp_name"]);
-
-					$nuevoAncho = 500;
-					$nuevoAlto = 500;
-
-					/*=============================================
-					CREAMOS EL DIRECTORIO DONDE VAMOS A GUARDAR LA FOTO DEL USUARIO
-					=============================================*/
-
-					$directorio = "vistas/img/productos/".$_POST["nuevoCodigo"];
-
-					mkdir($directorio, 0755);
-
-					/*=============================================
-					DE ACUERDO AL TIPO DE IMAGEN APLICAMOS LAS FUNCIONES POR DEFECTO DE PHP
-					=============================================*/
-
-					if($_FILES["nuevaImagen"]["type"] == "image/jpeg"){
-
-						/*=============================================
-						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
-						=============================================*/
-
-						$aleatorio = mt_rand(100,999);
-
-						$ruta = "vistas/img/productos/".$_POST["nuevoCodigo"]."/".$aleatorio.".jpg";
-
-						$origen = imagecreatefromjpeg($_FILES["nuevaImagen"]["tmp_name"]);						
-
-						$destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
-
-						imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
-
-						imagejpeg($destino, $ruta);
-
-					}
-
-					if($_FILES["nuevaImagen"]["type"] == "image/png"){
-
-						/*=============================================
-						GUARDAMOS LA IMAGEN EN EL DIRECTORIO
-						=============================================*/
-
-						$aleatorio = mt_rand(100,999);
-
-						$ruta = "vistas/img/productos/".$_POST["nuevoCodigo"]."/".$aleatorio.".png";
-
-						$origen = imagecreatefrompng($_FILES["nuevaImagen"]["tmp_name"]);						
-
-						$destino = imagecreatetruecolor($nuevoAncho, $nuevoAlto);
-
-						imagecopyresized($destino, $origen, 0, 0, 0, 0, $nuevoAncho, $nuevoAlto, $ancho, $alto);
-
-						imagepng($destino, $ruta);
-
-					}
-
-				}
-
-				$tabla = "productos";
-
-				$datos = array("id_categoria" => $_POST["nuevaCategoria"],
-							   "codigo" => $_POST["nuevoCodigo"],
-							   "descripcion" => $_POST["nuevaDescripcion"],
-							   "stock" => $_POST["nuevoStock"],
-							   "precio_compra" => $_POST["nuevoPrecioCompra"],
-							   "precio_venta" => $_POST["nuevoPrecioVenta"],
-							   "imagen" => $ruta);
+				$tabla = "pagos";
+				$datos = array(
+							   "nombre_cliente" => $nombreCliente,
+							   "numCuota" => $numCuota,
+							   "idPrestamo" => $idPrestamo,
+							   "idCuota" => $idCuota,
+							   "monto" => $monto,
+							   "interes" => $interes,
+								"capital" => $capital,
+								"capitalPendiente" => $capitalPendiente,
+								"fechaCobro" => $fechaCobro);
 
 				$respuesta = ModeloCobros::mdlIngresarCobro($tabla, $datos);
 
+				// var_dump($respuesta);
 				if($respuesta == "ok"){
 
 					echo'<script>
 
 						swal({
 							  type: "success",
-							  title: "El producto ha sido guardado correctamente",
+							  title: "El cobro de ha generado correctamente",
 							  showConfirmButton: true,
 							  confirmButtonText: "Cerrar"
 							  }).then(function(result){
 										if (result.value) {
 
-										window.location = "productos";
+										window.location = "cobros";
 
 										}
 									})
 
 						</script>';
 
-				}
+				}else{
+
+					echo'<script>
+	
+						swal({
+							  type: "error",
+							  title: "¡El pago no se realizó correctamente!",
+							  showConfirmButton: true,
+							  confirmButtonText: "Cerrar"
+							  }).then(function(result){
+								if (result.value) {
+	
+								window.location = "cobros";
+	
+								}
+							})
+							</script>';
+					}
+	
 
 
-			}else{
-
-				echo'<script>
-
-					swal({
-						  type: "error",
-						  title: "¡El producto no puede ir con los campos vacíos o llevar caracteres especiales!",
-						  showConfirmButton: true,
-						  confirmButtonText: "Cerrar"
-						  }).then(function(result){
-							if (result.value) {
-
-							window.location = "productos";
-
-							}
-						})
-
-			  	</script>';
-			}
+			
 		}
 
 	}

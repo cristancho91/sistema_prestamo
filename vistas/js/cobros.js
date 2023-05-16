@@ -82,9 +82,7 @@ $(document).ready(function() {
 
 			window.location = "index.php?ruta=cobros&fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
 
-		}
-
-		)
+		});
 
 		/*=============================================
 		CANCELAR RANGO DE FECHAS
@@ -110,7 +108,7 @@ $(document).ready(function() {
 
 			// Utilizar el valor de la ruta GET
 			window.location = ruta;
-		})
+		});
 
 		/*=============================================
 		CAPTURAR HOY
@@ -152,6 +150,87 @@ $(document).ready(function() {
 				localStorage.setItem("capturarRangocobro", "Hoy2");
 
 				window.location = "index.php?ruta=cobros&fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
+
+			}
+
+		});
+
+		
+	});
+	// AGREGANDO DATOS A LA CUOTA A PAGAR 
+	$(".tablaCobros").on("click",".btnPagarCuota", function(){
+		
+		var idCuota = $(this).data("id_cuota");
+		var datos = new FormData();
+		datos.append("idCuota", idCuota);
+
+		$.ajax({
+
+			url:"ajax/cobros.ajax.php",
+			method: "POST",
+			data: datos,
+			cache: false,
+			contentType: false,
+			processData: false,
+			dataType: "json",
+			success: function(respuesta){
+
+
+				$("#idPrestamo").val(respuesta["id_prestamo"]);
+				$("#id_cuota").val(respuesta["id_cuota"]);
+				$("#numCouta").val(respuesta["num_cuota"]);
+				$("#cantidad").val(respuesta["monto_cuota"]);
+				$("#interesPagar").val(respuesta["interes_a_pagar"]);
+				$("#capitalPagar").val(respuesta["capital_a_pagar"]);
+				$("#capitalPendiente").val(respuesta["cantidad_pendiente"]);
+				$("#fechaCobro").val(respuesta["fecha_vencimiento"]);
+				$("#estadoCuota").val(respuesta["estado"]);
+
+				let idPrestamo = respuesta["id_prestamo"];
+				let datos2 = new FormData();
+				datos2.append("idPrestamo",idPrestamo);
+
+				$.ajax({					
+
+					url:"ajax/cobros.ajax.php",
+					method: "POST",
+					data: datos2,
+					cache: false,
+					contentType: false,
+					processData: false,
+					dataType: "json",
+					success: function(respuesta){
+
+
+						let idCliente = respuesta["id_cliente"];
+						let datos3 = new FormData();
+						datos3.append("idCliente",idCliente);
+
+						$.ajax({					
+
+							url:"ajax/cobros.ajax.php",
+							method: "POST",
+							data: datos3,
+							cache: false,
+							contentType: false,
+							processData: false,
+							dataType: "json",
+							success: function(respuesta){
+								$("#nombreCliente").val(respuesta["nombre"]);
+
+							}
+
+						});
+
+
+
+					}
+
+
+				});
+
+				
+
 
 			}
 

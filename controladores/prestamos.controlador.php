@@ -134,7 +134,7 @@ class ControladorPrestamos{
 	}
 
 	/*=============================================
-	EDITAR VENTA
+	EDITAR PRESTAMO
 	=============================================*/
 
 	static public function ctrEditarPrestamo(){
@@ -142,7 +142,7 @@ class ControladorPrestamos{
 		if(isset($_POST["editarVenta"])){
 
 			/*=============================================
-			FORMATEAR TABLA DE PRODUCTOS Y LA DE CLIENTES
+			FORMATEAR TABLA DE PRESTAMOS Y  CLIENTES
 			=============================================*/
 			$tabla = "prestamos";
 
@@ -266,7 +266,7 @@ class ControladorPrestamos{
 			}
 
 			/*=============================================
-			GUARDAR CAMBIOS DE LA COMPRA
+			GUARDAR CAMBIOS DEL PRESTAMO
 			=============================================*/	
 
 			$datos = array("id_vendedor"=>$_POST["idVendedor"],

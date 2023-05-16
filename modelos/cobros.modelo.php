@@ -5,14 +5,14 @@ require_once "conexion.php";
 class ModeloCobros{
 
 	/*=============================================
-	MOSTRAR PRODUCTOS
+	MOSTRAR CUOTAS
 	=============================================*/
 
-	static public function mdlMostrarCobros($tabla, $item, $valor, $orden){
+	static public function mdlMostrarCobros($tabla, $item, $valor){
 
 		if($item != null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item ORDER BY id DESC");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item ");
 
 			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
 
@@ -22,7 +22,7 @@ class ModeloCobros{
 
 		}else{
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla ORDER BY $orden DESC");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
 
 			$stmt -> execute();
 
@@ -39,26 +39,75 @@ class ModeloCobros{
 	=============================================*/
 	static public function mdlIngresarCobro($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("INSERT INTO $tabla(id_categoria, codigo, descripcion, imagen, stock, precio_compra, precio_venta) VALUES (:id_categoria, :codigo, :descripcion, :imagen, :stock, :precio_compra, :precio_venta)");
+		$pdo = Conexion::conectar();
+		$pdo->beginTransaction();
 
-		$stmt->bindParam(":id_categoria", $datos["id_categoria"], PDO::PARAM_INT);
-		$stmt->bindParam(":codigo", $datos["codigo"], PDO::PARAM_STR);
-		$stmt->bindParam(":descripcion", $datos["descripcion"], PDO::PARAM_STR);
-		$stmt->bindParam(":imagen", $datos["imagen"], PDO::PARAM_STR);
-		$stmt->bindParam(":stock", $datos["stock"], PDO::PARAM_STR);
-		$stmt->bindParam(":precio_compra", $datos["precio_compra"], PDO::PARAM_STR);
-		$stmt->bindParam(":precio_venta", $datos["precio_venta"], PDO::PARAM_STR);
+		try {
 
-		if($stmt->execute()){
+			$stmt = $pdo->prepare("INSERT INTO $tabla(id_prestamo, id_cuota, fecha_pago, monto_pagado, saldo_pendiente) VALUES (:id_prestamo, :id_cuota, NOW(), :monto_pagado, :saldo_pendiente)");
 
-			return "ok";
+			$stmt->bindParam(":id_prestamo", $datos["idPrestamo"], PDO::PARAM_INT);
+			$stmt->bindParam(":id_cuota", $datos["idCuota"], PDO::PARAM_INT);
+			$stmt->bindParam(":monto_pagado", $datos["monto"], PDO::PARAM_INT);
+			$stmt->bindParam(":saldo_pendiente", $datos["capitalPendiente"], PDO::PARAM_INT);
 
-		}else{
+			if($stmt->execute()){
 
-			return "error";
+				// Obtener el ID del préstamo recién creado
+				$idPagoCuota = $pdo->lastInsertId();
+				$tablaGanancia = "ganancia";
+
+				//llenamos la tabla de ganancias.
+				$stmt2 = $pdo->prepare("INSERT INTO $tablaGanancia(id_pago, ganancia) VALUES (:id_pago, :ganancia)");
+
+				$stmt2->bindParam(":id_pago", $idPagoCuota, PDO::PARAM_INT);
+				$stmt2->bindParam(":ganancia", $datos["interes"], PDO::PARAM_INT);
+
+				$stmt2->execute();
+				//cambiamos los estados de la cuota y vemos que el estado del prestamo
+				$stmt4 = $pdo->prepare("UPDATE cuotas SET estado = 0 WHERE id_cuota = :id_cuota");
+
+				$stmt4->bindParam(":id_cuota", $datos["idCuota"], PDO::PARAM_INT);
+
+				$stmt4->execute();
+
+				$stmt5 = $pdo->prepare("UPDATE prestamos SET saldo_pendiente = :saldo_pendiente WHERE id_prestamo = :id_prestamo");
+
+				$stmt5->bindParam(":id_prestamo", $datos["idPrestamo"], PDO::PARAM_INT);
+				$stmt5->bindParam(":saldo_pendiente", $datos["capitalPendiente"], PDO::PARAM_INT);
+
+				$stmt5->execute();
+
+				
+				if($_POST["capitalPendiente"] == 0){
+
+					$stmt3 = $pdo->prepare("UPDATE prestamos SET estado_prestamo = 0 WHERE id_prestamo = :id_prestamo");
+
+					$stmt3->bindParam(":id_prestamo", $datos["idPrestamo"], PDO::PARAM_INT);
+
+					$stmt3->execute();
+
+				}
+
+				
+
+				$pdo->commit();
+
+				return "ok";
+
+			}else{
+
+				return "error";
+			
+			}
 		
+			$stmt = null;
+		}catch (PDOException $e) {
+				
+			$pdo->rollBack();
+			return "error".$e->getMessage();
 		}
-		$stmt = null;
+		
 
 	}
 

@@ -64,7 +64,7 @@ if($_SESSION["perfil"] == "Vendedor"){
 
       <div class="container">
 
-        <div class="row">
+        <!-- <div class="row">
 
          <div class="col-lg-4">
                 <div class="col-lg-4" style="height: 30px; width:30px;border-radius:50%;background-color: green;">
@@ -104,7 +104,7 @@ if($_SESSION["perfil"] == "Vendedor"){
 
           </div>
 
-        </div>
+        </div> -->
 
       </div>
 
@@ -112,7 +112,7 @@ if($_SESSION["perfil"] == "Vendedor"){
         TABLA
       ======================================-->
         
-       <table class="table table-bordered table-striped dt-responsive tablas" width="100%">
+       <table class="table table-bordered table-striped dt-responsive tablas tablaCobros" width="100%">
          
         <thead>
          
@@ -179,9 +179,11 @@ if($_SESSION["perfil"] == "Vendedor"){
 
                   <td>
 
-                    <div class="btn-group">
+                    <div class="btn-group">';
 
-                      <button  class="btn btn-success btnPagarCuota" data-toggle="modal" data-target="#modalPagarCuota" id_cuota="'.$value["id_cuota"].'">
+                    if($value["estado"]){
+                      echo '
+                      <button  class="btn btn-success btnPagarCuota" data-toggle="modal" data-target="#modalPagarCuota" data-id_cuota="'.$value["id_cuota"].'">
 
                       <i class="fa fa-tasks"></i>
 
@@ -192,6 +194,7 @@ if($_SESSION["perfil"] == "Vendedor"){
                       <i class="fa fa-money"></i>
 
                       </button>';
+                    }
 
                     echo '</div>  
 
@@ -232,7 +235,7 @@ MODAL PAGAR CUOTA
 
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-          <h4 class="modal-title">Pagar Cuota</h4>
+          <h4 class="modal-title text-center">Pagar Cuota</h4>
 
         </div>
 
@@ -247,86 +250,93 @@ MODAL PAGAR CUOTA
             <!-- ENTRADA PARA EL NOMBRE -->
             
             <div class="form-group col-lg-6">
-              
+              <label for="">Nombre Cliente:</label>
               <div class="input-group">
                 
               
                 <span class="input-group-addon"><i class="fa fa-user"></i></span> 
 
-                <input type="text" class="form-control input-xs" name="nuevoCliente" readonly  required>
-                <input type="hidden" class="form-control input-xs" name="id_prestamo" readonly  required>
+                <input type="text" class="form-control input-xs" id="nombreCliente" name="nombreCliente" readonly  required>
 
               </div>
 
             </div>
 
-            <!-- ENTRADA PARA EL DOCUMENTO ID -->
+            <!-- ENTRADA PARA NUMERO DE CUOTA -->
             
             <div class="form-group col-lg-6">
+            <label for="">Número Cuota:</label>
               
               <div class="input-group">
               
                 <span class="input-group-addon"><i class="fa fa-key"></i></span> 
 
-                <input type="number" min="0" class="form-control input-xs" name="numCouta" readonly required>
-                <input type="hidden" min="0" class="form-control input-xs" name="id_cuota" readonly required>
+                <input type="number" class="form-control input-xs" id="numCouta" name="numCouta" readonly required>
+                <input type="hidden" class="form-control input-xs" id="idPrestamo" name="idPrestamo" readonly required>
+                <input type="hidden" class="form-control input-xs" id="id_cuota" name="id_cuota" readonly required>
                 
 
               </div>
 
             </div>
 
-            <!-- ENTRADA PARA EL EMAIL -->
+            <!-- ENTRADA PARA Cantidad a pagar -->
             
-            <div class="form-group">
+            <div class="form-group col-lg-6">
+            <label for="">Cantidad a Pagar:</label>
               
               <div class="input-group">
               
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span> 
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
 
-                <input type="number" min="0" class="form-control input-md" name="cantidad" readonly required>
+                <input type="number"  class="form-control input-xs" id="cantidad" name="cantidad" readonly required>
 
               </div>
 
             </div>
 
-            <!-- ENTRADA PARA EL TELÉFONO -->
+            <!-- ENTRADA PARA EL INTERÉS A PAGAR -->
             
-            <div class="form-group">
+            <div class="form-group col-lg-6">
+            <label for="">Interés a Pagar:</label>
               
               <div class="input-group">
               
-                <span class="input-group-addon"><i class="fa fa-phone"></i></span> 
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
 
-                <input type="text" class="form-control input-lg" name="nuevoTelefono" placeholder="Ingresar teléfono" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
+                <input type="number" class="form-control input-xs" id="interesPagar" name="interesPagar"  readonly required>
 
               </div>
 
             </div>
 
-            <!-- ENTRADA PARA LA DIRECCIÓN -->
+            <!-- ENTRADA PARA EL CAPITAL A PAGAR -->
             
-            <div class="form-group">
+            <div class="form-group col-lg-6">
+            <label for="">Capital a Pagar:</label>
               
               <div class="input-group">
               
-                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
 
-                <input type="text" class="form-control input-lg" name="nuevaDireccion" placeholder="Ingresar dirección" required>
+                <input type="number" class="form-control input-xs" id="capitalPagar" name="capitalPagar" readonly required>
 
               </div>
 
             </div>
 
-             <!-- ENTRADA PARA LA FECHA DE NACIMIENTO -->
+             <!-- ENTRADA PARA LA FECHA y cantidad pendiente -->
             
-            <div class="form-group">
+            <div class="form-group col-lg-6">
+            <label for="">Capital Pendiente:</label>
               
               <div class="input-group">
               
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
 
-                <input type="text" class="form-control input-lg" name="nuevaFechaNacimiento" placeholder="Ingresar fecha nacimiento" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required>
+                <input type="number" class="form-control input-xs" id="capitalPendiente" name="capitalPendiente" readonly  required>
+
+                <input type="hidden" class="form-control input-xs" id="fechaCobro" name="fechaCobro">
 
               </div>
 
@@ -342,9 +352,9 @@ MODAL PAGAR CUOTA
 
         <div class="modal-footer">
 
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
 
-          <button type="submit" class="btn btn-primary">Guardar cliente</button>
+          <button type="submit" class="btn btn-primary">Pagar</button>
 
         </div>
 
@@ -352,8 +362,8 @@ MODAL PAGAR CUOTA
 
       <?php
 
-        $crearCliente = new ControladorClientes();
-        $crearCliente -> ctrCrearCliente();
+        $crearPago = new ControladorCobros();
+        $crearPago -> ctrCrearCobro();
 
       ?>
 
