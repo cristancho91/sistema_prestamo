@@ -63,7 +63,7 @@ if($_SESSION["perfil"] == "Especial"){
 
       <div class="box-body">
         
-       <table class="table table-bordered table-striped dt-responsive tablas" width="100%">
+       <table class="table table-bordered table-striped dt-responsive tablas tablaPrestamos" width="100%">
          
         <thead>
          
@@ -135,7 +135,7 @@ if($_SESSION["perfil"] == "Especial"){
 
                     if($value["estado_prestamo"]){
                       echo '
-                      <button class="btn btn-primary btnCancelarPrestamo" codigoPrestamo="'.$value["id_prestamo"].'">
+                      <button class="btn btn-primary btnCancelarPrestamo" id="btnCancelarPrestamo" data-toggle="modal" data-target="#CancelarPrestamo"codigoPrestamo="'.$value["id_prestamo"].'">
 
                       <i class="fa fa-money"></i>
 
@@ -170,18 +170,168 @@ if($_SESSION["perfil"] == "Especial"){
 
        </table>
 
-       <?php
-
-      $eliminarPrestamo = new ControladorPrestamos();
-      $eliminarPrestamo -> ctrEliminarPrestamo();
-
-      ?>
+       
        
 
       </div>
 
     </div>
 
+    <!--=====================================
+    MODAL PAGAR CUOTA
+    ======================================-->
+
+    <div id="CancelarPrestamo" class="modal fade" role="dialog">
+      
+      <div class="modal-dialog">
+
+        <div class="modal-content">
+
+          <form role="form" method="post">
+
+            <!--=====================================
+            CABEZA DEL MODAL
+            ======================================-->
+
+            <div class="modal-header" style="background:#3c8dbc; color:white">
+
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+              <h4 class="modal-title text-center">Recoger Prestamo</h4>
+
+            </div>
+
+            <!--=====================================
+            CUERPO DEL MODAL
+            ======================================-->
+
+            <div class="modal-body">
+
+              <div class="box-body">
+
+                <!-- ENTRADA PARA EL NOMBRE -->
+                
+                <div class="form-group col-lg-6">
+                  <label for="">Nombre Cliente:</label>
+                  <div class="input-group">
+                    
+                  
+                    <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+
+                    <input type="text" class="form-control input-xs" id="nombreCliente" name="nombreCliente" value="<?php echo $value["nombre_cliente"] ?>" readonly  required>
+
+                  </div>
+
+                </div>
+
+                <!-- ENTRADA PARA NUMERO DE CUOTA -->
+                
+                <div class="form-group col-lg-6">
+                <!-- <label for="">Número Cuota:</label> -->
+                  
+                  <div class="input-group">
+                  
+                    <!-- <span class="input-group-addon"><i class="fa fa-key"></i></span>  -->
+
+                    <!-- <input type="number" class="form-control input-xs" id="numCouta" name="numCouta" readonly required> -->
+                    <input type="hidden" class="form-control input-xs" id="idPrestamo" name="idPrestamo" value="<?php echo $value["id_prestamo"] ?>" readonly required>
+                    <input type="hidden" class="form-control input-xs" id="cantidad_prestamo" name="cantidad_prestamo"value="<?php echo $value["monto"] ?>" readonly required>
+                    
+
+                  </div>
+
+                </div>
+
+                <!-- ENTRADA PARA Cantidad a pagar -->
+                <?php
+                $saldoPendente =floatval($value["saldo_pendiente"]) ;
+                $interes = intval($value["tasa_interes"]);
+                $iteresAPagar = $saldoPendente*($interes/100);
+                $cantidadPagar = ($saldoPendente +$iteresAPagar);
+                  // var_dump($cantidadPagar);
+                
+                ?>
+                <div class="form-group col-lg-6">
+                <label for="">Cantidad a Pagar:</label>
+                  
+                  <div class="input-group">
+                  
+                    <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
+
+                    <input type="number"  class="form-control input-xs" id="cantidad" name="cantidad"value="<?php echo $cantidadPagar ?>" readonly required>
+
+                  </div>
+
+                </div>
+
+                <!-- ENTRADA PARA EL INTERÉS A PAGAR -->
+                
+                <div class="form-group col-lg-6">
+                <label for="">Interés a Pagar:</label>
+                  
+                  <div class="input-group">
+                  
+                    <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
+
+                    <input type="number" class="form-control input-xs" id="interesPagar" name="interesPagar"value="<?php echo $iteresAPagar ?>"  readonly required>
+
+                  </div>
+
+                </div>
+
+                <!-- ENTRADA PARA EL CAPITAL A PAGAR -->
+                
+                <div class="form-group col-lg-6">
+                <label for="">Capital a Pagar:</label>
+                  
+                  <div class="input-group">
+                  
+                    <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
+
+                    <input type="number" class="form-control input-xs" id="capitalPagar" name="capitalPagar" value="<?php echo $saldoPendente ?>" readonly required>
+
+                  </div>
+
+                </div>
+
+      
+              </div>
+
+            </div>
+
+            <!--=====================================
+            PIE DEL MODAL
+            ======================================-->
+
+            <div class="modal-footer">
+
+              <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+
+              <button type="submit" class="btn btn-primary">Pagar</button>
+
+            </div>
+
+          </form>
+
+          <?php
+
+            $crearPago = new ControladorPrestamos();
+            $crearPago -> ctrRecogerPrestamo();
+
+           
+
+            $eliminarPrestamo = new ControladorPrestamos();
+            $eliminarPrestamo -> ctrEliminarPrestamo();
+
+    
+
+          ?>
+
+        </div>
+
+      </div>
+
+    </div>
   </section>
 
 </div>

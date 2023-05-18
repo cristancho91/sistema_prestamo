@@ -114,7 +114,7 @@ class ControladorPrestamos{
 
 				swal({
 					  type: "success",
-					  title: "La venta ha sido guardada correctamente",
+					  title: "El prestamo ha sido guardada correctamente",
 					  showConfirmButton: true,
 					  confirmButtonText: "Cerrar"
 					  }).then(function(result){
@@ -310,7 +310,7 @@ class ControladorPrestamos{
 
 
 	/*=============================================
-	ELIMINAR VENTA
+	ELIMINAR PRESTAMO
 	=============================================*/
 
 	static public function ctrEliminarPrestamo(){
@@ -550,7 +550,52 @@ class ControladorPrestamos{
 		}
 
 	}
+	/*=============================================
+	RECOGER PRESTAMO
+	=============================================*/
 
+	static public function ctrRecogerPrestamo(){
+		if(isset($_POST["idPrestamo"])){
+
+			$id_prestamo = $_POST["idPrestamo"];
+			$tabla = "pagos";
+
+			$datos = array(
+				"id_prestamo" => $id_prestamo,
+				"montoPagado" => $_POST["cantidad"],
+				"cantiad_prestada" =>$_POST["cantidad_prestamo"],
+				"iteresPagar"=> $_POST["interesPagar"],
+				"capitalPagar" =>$_POST["capitalPagar"]
+			);
+
+			$respuesta =ModeloPrestamos::mdlRecogerPrestamo($tabla,$datos);
+			var_dump($respuesta);
+
+			if($respuesta == "ok"){
+
+				echo'<script>
+
+				localStorage.removeItem("rango");
+
+				swal({
+					  type: "success",
+					  title: "El prestamo se recogió correctamente",
+					  showConfirmButton: true,
+					  confirmButtonText: "Cerrar"
+					  }).then(function(result){
+								if (result.value) {
+
+								window.location = "prestamos";
+
+								}
+							})
+
+				</script>';
+
+			}
+
+		};
+	}
 
 	/*=============================================
 	SUMA TOTAL prestamos

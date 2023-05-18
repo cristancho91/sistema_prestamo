@@ -503,5 +503,10 @@ $(document).ready(function() {
 		});
 	});
 
+	//recoger prestamo
+
+	// $(".tablaPrestamos").on("click",".btnCancelarPrestamo", function(){
+
+	// });
 
 

@@ -338,5 +338,72 @@ class ModeloPrestamos{
 		$stmt = null;
 	}
 
+
+	static public function mdlRecogerPrestamo($tabla,$datos){
+		
+		$pdo = Conexion::conectar();
+		$pdo->beginTransaction();
+		try {
+			
+
+			$saldoPendiente = 0;
+
+			$stmt = $pdo->prepare("INSERT INTO $tabla(id_prestamo,  fecha_pago,monto_pagado, saldo_pendiente) VALUES ( :id_prestamo, NOW(),:monto_pagado, :saldo_pendiente)");
+
+			$stmt->bindParam(":id_prestamo", $datos["id_prestamo"], PDO::PARAM_INT);
+			$stmt->bindParam(":monto_pagado", $datos["montoPagado"], PDO::PARAM_INT);
+			$stmt->bindParam(":saldo_pendiente", $saldoPendiente, PDO::PARAM_INT);
+
+			
+
+			
+			if($stmt->execute()){
+
+				// Obtener el ID del PAGo recién creado
+				$id_pago = $pdo->lastInsertId();
+
+				//editamos el prestamo
+				$stmt2 = $pdo->prepare("UPDATE prestamos SET saldo_pendiente = 0,estado_prestamo = 0 WHERE id_prestamo = :id");
+				$stmt2->bindParam(":id", $datos["id_prestamo"], PDO::PARAM_INT);
+
+				$stmt2->execute();
+				
+				//insertamos las ganancias
+				$stmt3 = $pdo->prepare("INSERT INTO ganancia (id_pago,ganancia) VALUES (:id_pago,:ganancia)");
+
+				$stmt3->bindParam(":id_pago", $id_pago, PDO::PARAM_INT);
+				$stmt3->bindParam(":ganancia", $datos["iteresPagar"], PDO::PARAM_INT);
+				
+				$stmt3->execute();
+
+
+				//editamos las cuotas
+				$stmt4 = $pdo->prepare("UPDATE cuotas SET cantidad_pendiente = 0,estado = 0 WHERE id_prestamo = :id AND estado = 1");
+				$stmt4->bindParam(":id", $datos["id_prestamo"], PDO::PARAM_INT);
+
+				$stmt4->execute();
+
+				// Confirmar la transacción
+				$pdo->commit();
+						
+				return "ok";
+
+			}else{
+
+				return "error";
+			
+			}
+
+			$stmt = null;
+	
+		} catch (PDOException $e) {
+				
+			$pdo->rollBack();
+			return "error".$e->getMessage();
+		}
+
+		
+	}
+
 	
 }
