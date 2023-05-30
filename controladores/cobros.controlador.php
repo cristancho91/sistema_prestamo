@@ -17,7 +17,7 @@ class ControladorCobros{
 	}
 
 	/*=============================================
-	CREAR PRODUCTO
+	CREAR CUOTAS
 	=============================================*/
 
 	static public function ctrCrearCobro(){
@@ -97,7 +97,7 @@ class ControladorCobros{
 	}
 
 	/*=============================================
-	EDITAR PRODUCTO
+	EDITAR COBRO
 	=============================================*/
 
 	static public function ctrEditarCobro(){
@@ -245,8 +245,10 @@ class ControladorCobros{
 
 	}
 
+	
+
 	/*=============================================
-	BORRAR PRODUCTO
+	BORRAR COBRO, CUOTA
 	=============================================*/
 	static public function ctrEliminarCobro($item,$valor){
 

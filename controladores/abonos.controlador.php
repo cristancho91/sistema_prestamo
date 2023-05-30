@@ -1,82 +1,119 @@
 <?php
 
-class ControladorCategorias{
+class ControladorAbonos{
+
 
 	/*=============================================
-	CREAR CATEGORIAS
+	MOSTRAR Abonos
 	=============================================*/
 
-	static public function ctrCrearCategoria(){
+	static public function ctrMostrarAbonos($item, $valor){
 
-		if(isset($_POST["nuevaCategoria"])){
+		$tabla = "abonos";
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevaCategoria"])){
-
-				$tabla = "categorias";
-
-				$datos = $_POST["nuevaCategoria"];
-
-				$respuesta = ModeloCategorias::mdlIngresarCategoria($tabla, $datos);
-
-				if($respuesta == "ok"){
-
-					echo'<script>
-
-					swal({
-						  type: "success",
-						  title: "La categoría ha sido guardada correctamente",
-						  showConfirmButton: true,
-						  confirmButtonText: "Cerrar"
-						  }).then(function(result){
-									if (result.value) {
-
-									window.location = "categorias";
-
-									}
-								})
-
-					</script>';
-
-				}
-
-
-			}else{
-
-				echo'<script>
-
-					swal({
-						  type: "error",
-						  title: "¡La categoría no puede ir vacía o llevar caracteres especiales!",
-						  showConfirmButton: true,
-						  confirmButtonText: "Cerrar"
-						  }).then(function(result){
-							if (result.value) {
-
-							window.location = "categorias";
-
-							}
-						})
-
-			  	</script>';
-
-			}
-
-		}
-
-	}
-
-	/*=============================================
-	MOSTRAR CATEGORIAS
-	=============================================*/
-
-	static public function ctrMostrarCategorias($item, $valor){
-
-		$tabla = "categorias";
-
-		$respuesta = ModeloCategorias::mdlMostrarCategorias($tabla, $item, $valor);
+		$respuesta = ModeloAbonos::mdlMostrarAbonos($tabla, $item, $valor);
 
 		return $respuesta;
 	
+	}
+
+	/*=============================================
+	CREAR ABONOS EN LAS CUOTAS
+	=============================================*/
+	static public function ctrCrearAbonos(){
+
+		if(isset($_POST['nombreCliente2'])){
+
+			$tabla = "abonos";
+
+			$num_cuota = $_POST['numCouta2'];
+			$nombre_cliente = $_POST['nombreCliente2'];
+			$id_prestamo = $_POST['idPrestamo2'];
+			$tasaInteres= $_POST["interesPrincipal"];
+			$id_cuota = $_POST['id_cuota2'];
+			$cantidad_abono = $_POST['cantidadAbono'];
+			$interesA_pagar = $_POST["interesPagar2"];
+			$capital_pagar = $_POST["capitalPagar2"];
+			$capital_pendiente = $_POST["capitalPendiente2"];
+			$formaPago = $_POST["formaPago"];
+			$tiempoMeses = $_POST["tiempo"];
+			$fecha_cobro = $_POST["fechaCobro2"];
+			$ganancia = 0;
+
+			if($cantidad_abono > 0 && $cantidad_abono <= $interesA_pagar){
+
+				$ganancia = $cantidad_abono;
+
+			}else{
+
+				$capital_pendiente = $capital_pendiente -($cantidad_abono-$interesA_pagar);
+				
+				$ganancia = $interesA_pagar;
+				
+			}
+
+			$datos= array("nombre_cliente" => $nombre_cliente,
+				"numCuota" => $num_cuota,
+				"idPrestamo" => $id_prestamo,
+				"idCuota" => $id_cuota,
+				"montoAbono" => $cantidad_abono,
+				"interesApagar" => $interesA_pagar,
+				 "capital" => $capital_pagar,
+				 "tasaInteres" => $tasaInteres,
+				 "capitalPendiente" => $capital_pendiente,
+				 "ganancia"=> $ganancia,
+				 "formaPago" => $formaPago,
+				 "tiempoMeses" => $tiempoMeses,
+				 "fechaCobro" => $fecha_cobro);
+			
+				
+			$respuesta = ModeloAbonos::mdlCrearAbono($tabla,$datos);
+
+			if($respuesta == "ok"){
+				
+				echo'<script>
+
+				swal({
+					  type: "success",
+					  title: "El abono ha sido guardada correctamente",
+					  showConfirmButton: true,
+					  confirmButtonText: "Cerrar"
+					  }).then(function(result){
+								if (result.value) {
+
+								window.location = "cobros";
+
+								}
+							})
+
+				</script>';
+
+		
+
+
+		}else{
+
+			echo'<script>
+
+				swal({
+					  type: "error",
+					  title: "¡El abono no pudo ser creado!",
+					  showConfirmButton: true,
+					  confirmButtonText: "Cerrar"
+					  }).then(function(result){
+						if (result.value) {
+
+						window.location = "abonos";
+
+						}
+					})
+
+			  </script>';
+
+		}
+			
+		}
+
 	}
 
 	/*=============================================
@@ -94,7 +131,7 @@ class ControladorCategorias{
 				$datos = array("categoria"=>$_POST["editarCategoria"],
 							   "id"=>$_POST["idCategoria"]);
 
-				$respuesta = ModeloCategorias::mdlEditarCategoria($tabla, $datos);
+				$respuesta = ModeloAbonos::mdlEditarCategoria($tabla, $datos);
 
 				if($respuesta == "ok"){
 
@@ -154,7 +191,7 @@ class ControladorCategorias{
 			$tabla ="Categorias";
 			$datos = $_GET["idCategoria"];
 
-			$respuesta = ModeloCategorias::mdlBorrarCategoria($tabla, $datos);
+			$respuesta = ModeloAbonos::mdlBorrarCategoria($tabla, $datos);
 
 			if($respuesta == "ok"){
 

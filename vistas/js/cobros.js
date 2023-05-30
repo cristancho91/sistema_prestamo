@@ -236,3 +236,102 @@ $(document).ready(function() {
 
 		});
 	});
+
+	// AGREGANDO DATOS AL ABONO A REALIZAR 
+	$(".tablaCobros").on("click",".btnAbonoPrestamo", function(){
+		
+		var idCuota = $(this).data("id_cuota");
+		var datos = new FormData();
+		datos.append("idCuota", idCuota);
+
+		$.ajax({
+
+			url:"ajax/cobros.ajax.php",
+			method: "POST",
+			data: datos,
+			cache: false,
+			contentType: false,
+			processData: false,
+			dataType: "json",
+			success: function(respuesta){
+				// console.log(respuesta);
+
+				
+
+				$("#idPrestamo2").val(respuesta["id_prestamo"]);
+				$("#id_cuota2").val(respuesta["id_cuota"]);
+				$("#numCouta2").val(respuesta["num_cuota"]);
+				$("#cantidad2").val(respuesta["monto_cuota"]);
+				$("#interesPagar2").val(respuesta["interes_a_pagar"]);
+				$("#capitalPagar2").val(respuesta["capital_a_pagar"]);
+				
+				$("#fechaCobro2").val(respuesta["fecha_vencimiento"]);
+				$("#estadoCuota2").val(respuesta["estado"]);
+
+				//no permitir que introduzcan valores negativos
+
+				$('#cantidadAbono').on('input', function() {
+					var valor = parseFloat($(this).val());
+					if (valor < 0) {
+					  $(this).val(''); // Borra el valor si es negativo
+					}
+				  });
+
+				let idPrestamo = respuesta["id_prestamo"];
+				let datos2 = new FormData();
+				datos2.append("idPrestamo",idPrestamo);
+
+				$.ajax({					
+
+					url:"ajax/cobros.ajax.php",
+					method: "POST",
+					data: datos2,
+					cache: false,
+					contentType: false,
+					processData: false,
+					dataType: "json",
+					success: function(respuesta){
+
+						$("#capitalPendiente2").val(respuesta["saldo_pendiente"]);
+
+						// console.log(respuesta);
+
+						
+						$("#interesPrincipal").val(respuesta["tasa_interes"]);
+						$("#formaPago").val(respuesta["forma_pago"]);
+						$("#tiempo").val(respuesta["tiempo_en_meses"]);
+
+						let idCliente = respuesta["id_cliente"];
+						let datos3 = new FormData();
+						datos3.append("idCliente",idCliente);
+
+						$.ajax({					
+
+							url:"ajax/cobros.ajax.php",
+							method: "POST",
+							data: datos3,
+							cache: false,
+							contentType: false,
+							processData: false,
+							dataType: "json",
+							success: function(respuesta){
+								$("#nombreCliente2").val(respuesta["nombre"]);
+
+							}
+
+						});
+
+
+
+					}
+
+
+				});
+
+				
+
+
+			}
+
+		});
+	});

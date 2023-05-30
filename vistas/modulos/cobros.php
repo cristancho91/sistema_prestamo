@@ -116,7 +116,6 @@ if($_SESSION["perfil"] == "Vendedor"){
          
         <thead>
          
-         
          <tr>
            
            <th style="width:10px">#</th>
@@ -189,7 +188,7 @@ if($_SESSION["perfil"] == "Vendedor"){
 
                       </button>
 
-                      <button class="btn btn-primary btnAbonoPrestamo"  id_cuota="'.$value["id_cuota"].'">
+                      <button class="btn btn-primary btnAbonoPrestamo" data-toggle="modal" data-target="#modalAbono"  data-id_cuota="'.$value["id_cuota"].'">
 
                       <i class="fa fa-money"></i>
 
@@ -216,8 +215,8 @@ if($_SESSION["perfil"] == "Vendedor"){
     </div>
 
     <!--=====================================
-MODAL PAGAR CUOTA
-======================================-->
+    MODAL PAGAR CUOTA
+    ======================================-->
 
 <div id="modalPagarCuota" class="modal fade" role="dialog">
   
@@ -372,7 +371,166 @@ MODAL PAGAR CUOTA
   </div>
 
 </div>
+    <!--=====================================
+    MODAL ABONO A CUOTA
+    ======================================-->
 
+<div id="modalAbono" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title text-center">Abono a cuota</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+            <!-- ENTRADA PARA EL NOMBRE -->
+            
+            <div class="form-group col-lg-6">
+              <label for="">Nombre Cliente:</label>
+              <div class="input-group">
+                
+              
+                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+
+                <input type="text" class="form-control input-xs" id="nombreCliente2" name="nombreCliente2" readonly  required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA NUMERO DE CUOTA -->
+            
+            <div class="form-group col-lg-6">
+            <label for="">Número Cuota:</label>
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-key"></i></span> 
+
+                <input type="number" class="form-control input-xs" id="numCouta2" name="numCouta2" readonly required>
+                <input type="hidden" class="form-control input-xs" id="idPrestamo2" name="idPrestamo2" readonly required>
+                <input type="hidden" class="form-control input-xs" id="id_cuota2" name="id_cuota2" readonly required>
+                <input type="hidden" class="form-control input-xs" id="interesPrincipal" name="interesPrincipal" readonly required>
+                
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA Cantidad a pagar -->
+            
+            <div class="form-group col-lg-6">
+            <label for="">Cantidad a Abonar:</label>
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
+
+                <input type="number" min="0"  class="form-control input-xs" id="cantidadAbono" name="cantidadAbono" required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA EL INTERÉS A PAGAR -->
+            
+            <div class="form-group col-lg-6">
+            <label for="">Interés a Pagar:</label>
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
+
+                <input type="number" class="form-control input-xs" id="interesPagar2" name="interesPagar2"  readonly required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA EL CAPITAL A PAGAR -->
+            
+            <div class="form-group col-lg-6">
+            <label for="">Capital a Pagar:</label>
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
+
+                <input type="number" class="form-control input-xs" id="capitalPagar2" name="capitalPagar2" readonly required>
+
+              </div>
+
+            </div>
+
+             <!-- ENTRADA PARA LA FECHA y cantidad pendiente -->
+            
+            <div class="form-group col-lg-6">
+            <label for="">Capital Pendiente:</label>
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
+
+                <input type="number" class="form-control input-xs" id="capitalPendiente2" name="capitalPendiente2" readonly  required>
+
+                <input type="hidden" class="form-control input-xs" id="fechaCobro2" name="fechaCobro2">
+                <input type="hidden" class="form-control input-xs" id="formaPago" name="formaPago">
+                <input type="hidden" class="form-control input-xs" id="tiempo" name="tiempo">
+
+              </div>
+
+            </div>
+  
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancelar</button>
+
+          <button type="submit" class="btn btn-primary">Abonar</button>
+
+        </div>
+
+      </form>
+
+      <?php
+
+        $crearAbono = new ControladorAbonos();
+        $crearAbono -> ctrCrearAbonos();
+
+      ?>
+
+    </div>
+
+  </div>
+
+</div>
 
   </section>
 

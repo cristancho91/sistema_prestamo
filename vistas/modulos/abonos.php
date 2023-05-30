@@ -20,7 +20,7 @@ if($_SESSION["perfil"] == "Vendedor"){
     
     <h1>
       
-      Administrar categorías
+      ABONOS
     
     </h1>
 
@@ -28,7 +28,7 @@ if($_SESSION["perfil"] == "Vendedor"){
       
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
       
-      <li class="active">Administrar categorías</li>
+      <li class="active">Administrar Abonos</li>
     
     </ol>
 
@@ -42,7 +42,7 @@ if($_SESSION["perfil"] == "Vendedor"){
   
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarCategoria">
           
-          Agregar categoría
+          Agregar Abono
 
         </button>
 
@@ -57,8 +57,12 @@ if($_SESSION["perfil"] == "Vendedor"){
          <tr>
            
            <th style="width:10px">#</th>
-           <th>Categoria</th>
+           <th>Nombre Cliente</th>
+           <th>cantidad abonada</th>
+           <th>cantidad pendiente</th>
+           <th>Fecha Abono</th>
            <th>Acciones</th>
+
 
          </tr> 
 
@@ -71,25 +75,39 @@ if($_SESSION["perfil"] == "Vendedor"){
           $item = null;
           $valor = null;
 
-          $categorias = ControladorCategorias::ctrMostrarCategorias($item, $valor);
+          $abonos = ControladorAbonos::ctrMostrarAbonos($item, $valor);
 
-          foreach ($categorias as $key => $value) {
+          foreach ($abonos as $key => $value) {
+
+            $itemPrestamo = "id_prestamo";
+            $valorPrestamo = $value["id_prestamo"];
+
+            $prestamo = ControladorPrestamos::ctrMostrarPrestamos($itemPrestamo,$valorPrestamo);
+
+            $itemCliente = "id";
+            $valorCliente = $prestamo["id_cliente"];
+            $cliente = ControladorClientes::ctrMostrarClientes($itemCliente,$valorCliente);
            
             echo ' <tr>
 
                     <td>'.($key+1).'</td>
 
-                    <td class="text-uppercase">'.$value["categoria"].'</td>
+                    <td>'.$cliente["nombre"].'</td>
+                    <td>'.$value["cantidad_abonada"].'</td>
+                    
+                    <td>'.$prestamo["saldo_pendiente"].'</td>
+
+                    <td>'.$value["fecha"].'</td>
 
                     <td>
 
                       <div class="btn-group">
                           
-                        <button class="btn btn-warning btnEditarCategoria" idCategoria="'.$value["id"].'" data-toggle="modal" data-target="#modalEditarCategoria"><i class="fa fa-pencil"></i></button>';
+                        <button class="btn btn-warning btnEditarAbono" idAbono="'.$value["id_abono"].'" data-toggle="modal" data-target="#modalEditarAbono"><i class="fa fa-pencil"></i></button>';
 
                         if($_SESSION["perfil"] == "Administrador"){
 
-                          echo '<button class="btn btn-danger btnEliminarCategoria" idCategoria="'.$value["id"].'"><i class="fa fa-times"></i></button>';
+                          echo '<button class="btn btn-danger btnEliminarAbono" idAbono="'.$value["id_abono"].'"><i class="fa fa-times"></i></button>';
 
                         }
 
@@ -178,8 +196,8 @@ MODAL AGREGAR CATEGORÍA
 
         <?php
 
-          $crearCategoria = new ControladorCategorias();
-          $crearCategoria -> ctrCrearCategoria();
+          // $crearCategoria = new ControladorAbonos();
+          // $crearCategoria -> ctrCrearCategoria();
 
         ?>
 
@@ -257,8 +275,8 @@ MODAL EDITAR CATEGORÍA
 
       <?php
 
-          $editarCategoria = new ControladorCategorias();
-          $editarCategoria -> ctrEditarCategoria();
+          // $editarCategoria = new ControladorCategorias();
+          // $editarCategoria -> ctrEditarCategoria();
 
         ?> 
 
@@ -272,8 +290,8 @@ MODAL EDITAR CATEGORÍA
 
 <?php
 
-  $borrarCategoria = new ControladorCategorias();
-  $borrarCategoria -> ctrBorrarCategoria();
+  // $borrarCategoria = new ControladorCategorias();
+  // $borrarCategoria -> ctrBorrarCategoria();
 
 ?>
 
