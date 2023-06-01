@@ -14,7 +14,8 @@ $fechaFinal = null;
 
 }
 
-$respuesta = ControladorVentas::ctrRangoFechasVentas($fechaInicial, $fechaFinal);
+$respuesta = ControladorPrestamos::ctrRangoFechasPrestamos($fechaInicial, $fechaFinal);
+// var_dump($respuesta);
 
 $arrayFechas = array();
 $arrayVentas = array();
@@ -23,13 +24,14 @@ $sumaPagosMes = array();
 foreach ($respuesta as $key => $value) {
 
 	#Capturamos sólo el año y el mes
-	$fecha = substr($value["fecha"],0,7);
+	// $fecha = substr($value["fecha"],0,7);
+	$fecha = $value["fecha_prestamo"];
 
 	#Introducir las fechas en arrayFechas
 	array_push($arrayFechas, $fecha);
 
 	#Capturamos las ventas
-	$arrayVentas = array($fecha => $value["total"]);
+	$arrayVentas = array($fecha => $value["monto"]);
 
 	#Sumamos los pagos que ocurrieron el mismo mes
 	foreach ($arrayVentas as $key => $value) {
@@ -56,7 +58,7 @@ GRÁFICO DE VENTAS
 		
  		<i class="fa fa-th"></i>
 
-  		<h3 class="box-title">Gráfico de Ventas</h3>
+  		<h3 class="box-title">Gráfico de Prestamos</h3>
 
 	</div>
 
@@ -81,16 +83,16 @@ GRÁFICO DE VENTAS
 
 	    foreach($noRepetirFechas as $key){
 
-	    	echo "{ y: '".$key."', ventas: ".$sumaPagosMes[$key]." },";
+	    	echo "{ y: '".$key."', prestamos: ".$sumaPagosMes[$key]." },";
 
 
 	    }
 
-	    echo "{y: '".$key."', ventas: ".$sumaPagosMes[$key]." }";
+	    echo "{y: '".$key."', prestamos: ".$sumaPagosMes[$key]." }";
 
     }else{
 
-       echo "{ y: '0', ventas: '0' }";
+       echo "{ y: '0', prestamos: '0' }";
 
     }
 
@@ -98,8 +100,8 @@ GRÁFICO DE VENTAS
 
     ],
     xkey             : 'y',
-    ykeys            : ['ventas'],
-    labels           : ['ventas'],
+    ykeys            : ['prestamos'],
+    labels           : ['prestamos'],
     lineColors       : ['#efefef'],
     lineWidth        : 2,
     hideHover        : 'auto',

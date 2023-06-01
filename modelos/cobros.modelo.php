@@ -35,6 +35,23 @@ class ModeloCobros{
 	}
 
 	/*=============================================
+	MOSTRAR LAS CUOTAS QUE ESTAN ACTIVAS
+	=============================================*/
+
+	static public function mdlMostrarCuotasActivas($tabla){
+
+
+		$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE estado = 1");
+
+		$stmt -> execute();
+
+		return $stmt -> fetchAll();
+
+		$stmt = null;
+
+	}
+
+	/*=============================================
 	REGISTRO DE COBROS
 	=============================================*/
 	static public function mdlIngresarCobro($tabla, $datos){

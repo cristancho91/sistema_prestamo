@@ -17,6 +17,19 @@ class ControladorCobros{
 	}
 
 	/*=============================================
+	MOSTRAR LAS CUOTAS QUE ESTAN ACTIVAS
+	=============================================*/
+	static public function ctrMostrarCuotasActivas(){
+
+		$tabla = "cuotas";
+
+		$respuesta = ModeloCobros::mdlMostrarCuotasActivas($tabla);
+
+		return $respuesta;
+
+	}
+
+	/*=============================================
 	CREAR CUOTAS
 	=============================================*/
 

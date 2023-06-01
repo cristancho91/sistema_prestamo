@@ -302,7 +302,7 @@ class ModeloPrestamos{
 
 		if($item != null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT COUNT(*) AS cantidad_prestamos FROM $tabla WHERE id_cliente = :$item AND estado_prestamo = 1 ");
+			$stmt = Conexion::conectar()->prepare("SELECT COUNT(*) AS total_prestamos FROM $tabla WHERE id_cliente = :$item AND estado_prestamo = 1 ");
 
 
 			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_INT);

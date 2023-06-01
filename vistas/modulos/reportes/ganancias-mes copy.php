@@ -1,14 +1,17 @@
 <?php
 
-$item = null;
-$valor = null;
-$orden = "ventas";
+;
+// $fechaInicial = date('Y-m');
+$fechaInicial = "2023-05";
+// var_dump($fecha);
 
-$productos = ControladorProductos::ctrMostrarProductos($item, $valor, $orden);
 
-$colores = array("red","green","yellow","aqua","purple","blue","cyan","magenta","orange","gold");
+$ganancia = ControladorGanancias::ctrSumaGananciaFecha($fechaInicial, $fechaInicial);
+var_dump($ganancia);
 
-$totalVentas = ControladorProductos::ctrMostrarSumaVentas();
+// $colores = array("red","green","yellow","aqua","purple","blue","cyan","magenta","orange","gold");
+
+// $totalVentas = ControladorProductos::ctrMostrarSumaVentas();
 
 
 ?>

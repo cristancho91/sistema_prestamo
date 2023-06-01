@@ -44,7 +44,7 @@
 
           if($_SESSION["perfil"] =="Administrador"){
           
-           include "reportes/grafico-ventas.php";
+           include "reportes/grafico-prestamos.php";
 
           }
 
@@ -58,7 +58,7 @@
 
           if($_SESSION["perfil"] =="Administrador"){
           
-           include "reportes/productos-mas-vendidos.php";
+           include "reportes/ganancias-mes.php";
 
          }
 
@@ -72,7 +72,7 @@
 
           if($_SESSION["perfil"] =="Administrador"){
           
-           include "inicio/productos-recientes.php";
+           include "inicio/prestamos-recientes.php";
 
          }
 

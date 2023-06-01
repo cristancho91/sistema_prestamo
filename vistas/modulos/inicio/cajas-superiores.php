@@ -4,17 +4,17 @@ $item = null;
 $valor = null;
 $orden = "id";
 
-$ventas1 = new ControladorVentas();
-$ventas = $ventas1->ctrSumaTotalVentas();
+$prestamos = new ControladorPrestamos();
+$totalPrestamos = $prestamos->ctrContarPrestamos($item,$valor);
 
-$categorias = ControladorCategorias::ctrMostrarCategorias($item, $valor);
-$totalCategorias = count($categorias);
+$abonos = ControladorAbonos::ctrMostrarAbonos($item, $valor);
+$totalAbonos = count($abonos);
 
 $clientes = ControladorClientes::ctrMostrarClientes($item, $valor);
 $totalClientes = count($clientes);
 
-$productos = ControladorProductos::ctrMostrarProductos($item, $valor, $orden);
-$totalProductos = count($productos);
+$cuotas = ControladorCobros::ctrMostrarCuotasActivas();
+$totalcuotas = count($cuotas);
 
 ?>
 
@@ -26,9 +26,9 @@ $totalProductos = count($productos);
     
     <div class="inner">
       
-      <h3>$<?php echo number_format($ventas["total"],2); ?></h3>
+      <h3><?php echo $totalPrestamos["total_prestamos"]; ?></h3>
 
-      <p>Ventas</p>
+      <p>Prestamos</p>
     
     </div>
     
@@ -38,7 +38,7 @@ $totalProductos = count($productos);
     
     </div>
     
-    <a href="ventas" class="small-box-footer">
+    <a href="prestamos" class="small-box-footer">
       
       Más info <i class="fa fa-arrow-circle-right"></i>
     
@@ -54,9 +54,9 @@ $totalProductos = count($productos);
     
     <div class="inner">
     
-      <h3><?php echo number_format($totalCategorias); ?></h3>
+      <h3><?php echo number_format($totalAbonos); ?></h3>
 
-      <p>Categorías</p>
+      <p>Abonos</p>
     
     </div>
     
@@ -66,7 +66,7 @@ $totalProductos = count($productos);
     
     </div>
     
-    <a href="categorias" class="small-box-footer">
+    <a href="abonos" class="small-box-footer">
       
       Más info <i class="fa fa-arrow-circle-right"></i>
     
@@ -110,9 +110,9 @@ $totalProductos = count($productos);
   
     <div class="inner">
     
-      <h3><?php echo number_format($totalProductos); ?></h3>
+      <h3><?php echo number_format($totalcuotas); ?></h3>
 
-      <p>Productos</p>
+      <p>Cuotas Activas</p>
     
     </div>
     
@@ -122,7 +122,7 @@ $totalProductos = count($productos);
     
     </div>
     
-    <a href="productos" class="small-box-footer">
+    <a href="cobros" class="small-box-footer">
       
       Más info <i class="fa fa-arrow-circle-right"></i>
     
