@@ -78,7 +78,9 @@ class ModeloAbonos{
 			
 			$interes = $datos["tasaInteres"] / 100;
 			
-			$cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cantidad_cuotas)));
+			// $cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cantidad_cuotas)));
+			$cuota = ($capital/$cantidad_cuotas)+ ($capital*$interes);
+
 
 			//verificamos si solo pago interes o interes y algo de capital
 
@@ -217,8 +219,9 @@ class ModeloAbonos{
 			}
 
 			//guardamos la ganancia
-			$stmt5 = $pdo->prepare("INSERT INTO ganancia(ganancia) VALUES (:ganancia)");
+			$stmt5 = $pdo->prepare("INSERT INTO ganancia(id_prestamo,ganancia) VALUES (:id_prestamo,:ganancia)");
 
+			$stmt5->bindParam(":id_prestamo", $datos["idPrestamo"], PDO::PARAM_INT);
 			$stmt5->bindParam(":ganancia", $datos["ganancia"], PDO::PARAM_INT);
 
 			$stmt5->execute();

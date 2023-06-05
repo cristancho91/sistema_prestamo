@@ -75,8 +75,9 @@ class ModeloCobros{
 				$tablaGanancia = "ganancia";
 
 				//llenamos la tabla de ganancias.
-				$stmt2 = $pdo->prepare("INSERT INTO $tablaGanancia(id_pago, ganancia) VALUES (:id_pago, :ganancia)");
+				$stmt2 = $pdo->prepare("INSERT INTO $tablaGanancia(id_prestamo,id_pago, ganancia) VALUES (:id_prestamo,:id_pago, :ganancia)");
 
+				$stmt2->bindParam(":id_prestamo", $datos["idPrestamo"], PDO::PARAM_INT);
 				$stmt2->bindParam(":id_pago", $idPagoCuota, PDO::PARAM_INT);
 				$stmt2->bindParam(":ganancia", $datos["interes"], PDO::PARAM_INT);
 

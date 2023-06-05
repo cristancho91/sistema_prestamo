@@ -1,7 +1,8 @@
 <?php
 
-require_once "../../controladores/ventas.controlador.php";
-require_once "../../modelos/ventas.modelo.php";
+
+require_once "../../controladores/prestamos.controlador.php";
+require_once "../../modelos/prestamos.modelo.php";
 
 require_once "../../controladores/clientes.controlador.php";
 require_once "../../modelos/clientes.modelo.php";
@@ -9,8 +10,15 @@ require_once "../../modelos/clientes.modelo.php";
 require_once "../../controladores/usuarios.controlador.php";
 require_once "../../modelos/usuarios.modelo.php";
 
-require_once "../../controladores/productos.controlador.php";
-require_once "../../modelos/productos.modelo.php";
+require_once "../../controladores/cobros.controlador.php";
+require_once "../../modelos/cobros.modelo.php";
+
+require_once "../../controladores/abonos.controlador.php";
+require_once "../../modelos/abonos.modelo.php";
+
+require_once "../../controladores/ganancias.controlador.php";
+require_once "../../modelos/ganancia.modelo.php";
+
 
 class imprimirFactura{
 
@@ -18,48 +26,136 @@ class imprimirFactura{
 
 	public function traerImpresionFactura(){
 
-		
-		$impuesto 	= 0;
-		$total 		= 0;
 
 		//TRAEMOS LA INFORMACIÓN DE LA VENTA
 
-		$itemVenta = "codigo";
-		$valorVenta = $this->codigo;
+		$itemPrestamo = "id_prestamo";
+		$valorPrestamo = $this->codigo;
 
-		$respuestaVenta = ControladorVentas::ctrMostrarVentas($itemVenta, $valorVenta);
+		$respuestaPrestamo = ControladorPrestamos::ctrMostrarPrestamos($itemPrestamo, $valorPrestamo);
 
-		$fecha = substr($respuestaVenta["fecha"],0,-8);
-		$hora = substr($respuestaVenta["fecha"],10);
-		$productos = json_decode($respuestaVenta["productos"], true);
-		$neto = number_format($respuestaVenta["neto"],2);
-		$impuesto = number_format($respuestaVenta["impuesto"],2);
-		$total = number_format($respuestaVenta["total"],2);
-		$iva = number_format((($respuestaVenta["impuesto"]*100)/$respuestaVenta["total"]),2);
+		$idCliente = $respuestaPrestamo["id_cliente"];
+		$idPrestador = $respuestaPrestamo["id_prestador"];
+		$codigoPrestamo = $respuestaPrestamo["codigo_prestamo"];
+		$monto = $respuestaPrestamo["monto"];
+		$tasaInteres = $respuestaPrestamo["tasa_interes"];
+		$fechaPrestamo = $respuestaPrestamo["fecha_prestamo"];
+		$tiempoMeses = $respuestaPrestamo["tiempo_en_meses"];
+		$formaPago = $respuestaPrestamo["forma_pago"];
+		$estado = $respuestaPrestamo["estado_prestamo"];
+		$saldoPendiente = $respuestaPrestamo["saldo_pendiente"];
+		// ---------------------------------------------------------
 		
 		//TRAEMOS LA INFORMACIÓN DEL CLIENTE
+		$itemCuotas = null;
+		$valorCuota = null;;
+
+		$respuestaCuotas = ControladorCobros::ctrMostrarCobros($itemCuotas,$valorCuota);
+		// ---------------------------------------------------------
+
 
 		$itemCliente = "id";
-		$valorCliente = $respuestaVenta["id_cliente"];
+		$valorCliente = $idCliente;
 
 		$respuestaCliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
+		// ---------------------------------------------------------
 
-		//TRAEMOS LA INFORMACIÓN DEL VENDEDOR
+		//TRAEMOS LA INFORMACIÓN DEL PRESTADOR
 
 		$itemVendedor = "id";
-		$valorVendedor = $respuestaVenta["id_vendedor"];
+		$valorVendedor = $idPrestador;
 
 		$respuestaVendedor = ControladorUsuarios::ctrMostrarUsuarios($itemVendedor, $valorVendedor);
+		
 
 		$nombreImagen = "logocolor.png";
 		$imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents($nombreImagen));
 		// ---------------------------------------------------------
+		$itemAbono = null;
+		$valorAbono = $this->codigo;
+		$respuestaAbonos = ControladorAbonos::ctrMostrarAbonos($itemAbono,$valorAbono);
 
-		//print_r($configuracion); ?>
+		// ---------------------------------------------------------
+		$respuestaGanancia = ControladorGanancias::ctrSumarGananciasPorPrestamo($itemPrestamo,$valorPrestamo);
+		$gananciaPrestamo= $respuestaGanancia[0]["ganancia"]; 
+
+		// ---------------------------------------------------------
+		$capitalPagado= $monto-$saldoPendiente;
+		$interesPagado = 0;
+		$cuotasPagadas = 0;
+		$totalCuotas = 0;
+		$cuotaApagar = 0;
+		$diasMora = 0;
+
+		//DIAS EN MORA
+		// ---------------------------------------------------------
+		
+		$primeraFechaPendiente = null;
+		
+		
+		foreach ($respuestaCuotas as $valor) {
+
+			if($valor["id_prestamo"] == ($this->codigo)){
+
+				if ($valor["estado"] == '1') {
+					$primeraFechaPendiente =$valor["fecha_vencimiento"];
+					break;
+				}
+			}
+		}
+		// $fechaPago = '2023-05-28';
+		$fechaActual = new DateTime(); // Fecha actual
+
+		$fechaPagoObj = DateTime::createFromFormat('Y-m-d', $primeraFechaPendiente); // Convertir la fecha de pago a un objeto DateTime
+
+		if ($fechaActual > $fechaPagoObj) {
+			$intervalo = $fechaActual->diff($fechaPagoObj);
+			$diasMora = $intervalo->days;
+		} else {
+			$diasMora = 0;
+		}
+
+		// ---------------------------------------------------------
+		
+
+		foreach ($respuestaCuotas as $key => $value) {
+		
+
+			
+			if($value["id_prestamo"] == ($this->codigo)){
+				$totalCuotas = $totalCuotas +1;
+
+				if(!$value["estado"]){
+					// $capitalPagado = $capitalPagado + $value["capital_a_pagar"];
+					
+					$interesPagado = $interesPagado + $value["interes_a_pagar"];
+					$cuotasPagadas = $cuotasPagadas + 1;
+				}else{
+
+					
+					$cuotaApagar=$value["monto_cuota"];
+
+
+				}
+			}
+
+			
+		}
+		if($respuestaGanancia != 0){
+			$interesPagado += $gananciaPrestamo;
+		}
+		
+
+		// Creamos el PDF
+
+		 ?>
 		<!DOCTYPE html>
 		<html lang="en">
 		<head>
 			<meta charset="UTF-8">
+
+			<!-- Font Awesome -->
+  			<link rel="stylesheet" href="../../vistas/bower_components/font-awesome/css/font-awesome.min.css">
 
 			<style>
 				@import url('fonts/BrixSansRegular.css');
@@ -198,11 +294,11 @@ class imprimirFactura{
 					<td class="info_empresa">
 						
 						<div>
-							<span class="h2">CRISTANCHOLICORES</span>
-							<p>NIT: 1065885168-3</p>							
-							<p>Teléfono: 3187151351</p>
-							<p>Email: jhoncristancho08@gmail.com</p>
-							<p>Manzana H casa 4 tierra linda</p>
+							<span class="h2">INVERSIONES ANGELICA</span>
+							<!-- <p>NIT: 1065885168-3</p>							 -->
+							<p>Teléfono: 3162482360</p>
+							<p>Email: DELIA@gmail.com</p>
+							<p>Reservas del Buturama</p>
 							<p>Aguachica-Cesar</p>
 							
 							
@@ -211,28 +307,29 @@ class imprimirFactura{
 					</td>
 					<td class="info_factura">
 						<div class="round">
-							<span class="h3">Factura</span>
-							<p>No. Factura: <strong><?php echo $valorVenta; ?></strong></p>
-							<p>Fecha: <?php echo $fecha; ?></p>
-							<p>Hora: <?php echo $hora; ?></p>
+							<span class="h3">Crédito</span>
+							<p>No. Crédito: <strong><?php echo $codigoPrestamo; ?></strong></p>
+							<p>Fecha: <?php echo $fechaPrestamo; ?></p>
+							
 							<p>Vendedor: <?php echo $respuestaVendedor['nombre']; ?></p>
 						</div>
 					</td>
 				</tr>
 			</table>
+			
 			<table id="factura_cliente">
 				<tr>
 					<td class="info_cliente">
 						<div class="round">
-							<span class="h3">Cliente</span>
+							<span class="h3">Información Cliente</span>
 							<table class="datos_cliente">
 								<tr>
-									<td><label>CC:</label><p><?php echo $respuestaCliente['documento']; ?></p></td>
-									<td><label>Teléfono:</label> <p><?php echo $respuestaCliente['telefono']; ?></p></td>
+									<td><label><strong>CC:</strong> </label><p><?php echo $respuestaCliente['documento']; ?></p></td>
+									<td><label><strong>Teléfono:</strong> </label> <p><?php echo $respuestaCliente['telefono']; ?></p></td>
 								</tr>
 								<tr>
-									<td><label>Nombre:</label> <p><?php echo $respuestaCliente['nombre']; ?></p></td>
-									<td><label>Dirección:</label> <p><?php echo $respuestaCliente['direccion']; ?></p></td>
+									<td><label><strong>Nombre:</strong> </label> <p><?php echo $respuestaCliente['nombre']; ?></p></td>
+									<td><label><strong>Dirección:</strong> </label> <p><?php echo $respuestaCliente['direccion']; ?></p></td>
 								</tr>
 							</table>
 						</div>
@@ -240,62 +337,134 @@ class imprimirFactura{
 
 				</tr>
 			</table>
+			<!-- informacion del credito  -->
+			<table id="factura_cliente">
+				<tr>
+					<td class="info_cliente">
+						<div class="round">
+							<span class="h3">Información del Crédito</span>
+							<table class="datos_cliente">
+								<tr>
+									<td><label><strong>Capital Prestado:</strong> </label><p>$<?php echo number_format($monto) ; ?></p></td>
+									<td><label><strong>Capital Pagado:</strong> </label><p>$<?php echo number_format($capitalPagado) ; ?></p></td>
+									<td><label><strong>Intereses Pagados:</strong> </label> <p><?php echo number_format($interesPagado); ?></p></td>
+									<td><label><strong>Valor de la cuota:</strong> </label> <p>$<?php echo number_format($cuotaApagar); ?></p></td>
+								</tr>
+								<tr>
+									<td><label><strong>Capital Pendiente:</strong> </label><p>$<?php echo number_format($saldoPendiente) ; ?></p></td>
 
+									<td><label><strong>Cuotas Pagadas:</strong> </label> <p><?php echo $cuotasPagadas; ?> de <?php echo $totalCuotas; ?></p></td>
+									<td><label><strong>Tasa de interés:</strong></label> <p><?php echo $tasaInteres; ?>% Mes</p></td>
+									<td><label><strong>Mora:</strong> </label> <p><?php echo $diasMora; ?> Dias</p></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+
+				</tr>
+			</table>
+			<div class="informacion_pagos text-center">
+				<i class="fa fa-info-circle"></i>
+				<h3>Información de Pagos</h3>
+			</div>
 			<table id="factura_detalle">
 					<thead>
 						<tr>
-							<th width="50px">Cant.</th>
-							<th class="textleft">Descripción</th>
-							<th class="textright" width="150px">Precio Unitario.</th>
-							<th class="textright" width="150px"> Precio Total</th>
+							<th width="50px">No. Cuota</th>
+							<th width="textleft">Cuota</th>
+							<th class="textleft">Fecha</th>
+							<th class="textright" width="150px">Capital</th>
+							<th class="textright" width="150px"> Intereses</th>
+							<th class="textright" width="150px"> Estado Cuota</th>
 						</tr>
 					</thead>
 					<tbody id="detalle_productos">
 
 					<?php
-						foreach ($productos as $key => $item) {
+					// var_dump($respuestaCuotas);
+						foreach ($respuestaCuotas as $key => $item) {
 
-							$itemProducto = "descripcion";
-							$valorProducto = $item["descripcion"];
-							$orden = null;
-					
-							$respuestaProducto = ControladorProductos::ctrMostrarProductos($itemProducto, $valorProducto, $orden);
-					
-							$valorUnitario = number_format($respuestaProducto["precio_venta"], 2);
-					
-							$precioTotal = number_format($item["total"], 2);
+							if($item["id_prestamo"] == ($this->codigo)){
+
+								if($item["estado"]){
+									$estado = "Pendiente";
+									
+								}else{
+									$estado = "Pagado";
+								}
+
+							
 					?>
 						<tr>
-							<td class="textcenter"><?php echo $item['cantidad']; ?></td>
-							<td><?php echo $item['descripcion']; ?></td>
-							<td class="textright"><?php echo $valorUnitario; ?></td>
-							<td class="textright"><?php echo $precioTotal; ?></td>
+							<td class="textcenter"><?php echo $item['num_cuota']; ?></td>
+							<td class="textcenter"><?php echo number_format($item['monto_cuota']); ?></td>
+							<td><?php echo $item['fecha_vencimiento']; ?></td>
+							<td class="textright"><?php echo number_format($item["capital_a_pagar"]); ?></td>
+							<td class="textright"><?php echo number_format($item["interes_a_pagar"]); ?></td>
+
+							<td class="textright"><?php echo $estado; ?></td>
 						</tr>
 					<?php
-							
+							}
 							
 						}
 
+						
+
 					?>
 					</tbody>
+
 					<tfoot id="detalle_totales">
-						<tr>
-							<td colspan="3" class="textright"><span>SUBTOTAL Q.</span></td>
-							<td class="textright"><span><?php echo $neto; ?></span></td>
-						</tr>
-						<tr>
-							<td colspan="3" class="textright"><span>IVA (<?php echo $iva; ?> %)</span></td>
-							<td class="textright"><span><?php echo $impuesto; ?></span></td>
-						</tr>
-						<tr>
-							<td colspan="3" class="textright"><span>TOTAL Q.</span></td>
-							<td class="textright"><span><?php echo $total; ?></span></td>
-						</tr>
-				</tfoot>
+						
+					</tfoot>
 			</table>
-			<div>
-				<p class="nota">Si usted tiene preguntas sobre esta factura, <br>pongase en contacto con nombre, teléfono y Email</p>
-				<h4 class="label_gracias">¡Gracias por su compra!</h4>
+			<!-- tabla abonos -->
+			<div class="informacion_pagos ">
+				<i class="fa fa-info-circle"></i>
+				<h3>Información de Abonos</h3>
+			</div>
+			<table id="factura_detalle">
+					<thead>
+						<tr>
+							<th width="50px">No. Abono</th>
+							<th width="textleft">Monto Abono</th>
+							<th class="textleft">Fecha</th>
+						</tr>
+					</thead>
+					<tbody id="detalle_productos">
+
+					<?php
+					// var_dump($respuestaCuotas);
+					$num_Abono = 0;
+						foreach ($respuestaAbonos as $key => $item) {
+
+							if($item["id_prestamo"] == ($this->codigo)){
+								$num_Abono = $num_Abono+1;
+
+							
+					?>
+						<tr>
+							<td class="textcenter"><?php echo $num_Abono; ?></td>
+							<td class="textcenter"><?php echo number_format($item['cantidad_abonada']); ?></td>
+							<td><?php echo $item['fecha']; ?></td>
+						</tr>
+					<?php
+							}
+							
+						}
+
+						
+
+					?>
+					</tbody>
+
+					<tfoot id="detalle_totales">
+						
+					</tfoot>
+			</table>
+			<div >
+				<p class="nota">Si usted tiene preguntas sobre este crédito, <br>pongase en contacto con nombre, teléfono y Email con la empresa</p>
+				<h4 class="label_gracias">¡Gracias por preferirnos!</h4>
 			</div>
 
 		</div>

@@ -143,7 +143,7 @@ if($_SESSION["perfil"] == "Especial"){
 
                     }
                         echo '
-                      <button class="btn btn-info btnImprimirFactura" codigoPrestamo="'.$value["codigo_prestamo"].'">
+                      <button class="btn btn-info btnImprimirFactura" codigoPrestamo="'.$value["id_prestamo"].'">
 
                         <i class="fa fa-print"></i>
 
@@ -178,7 +178,7 @@ if($_SESSION["perfil"] == "Especial"){
     </div>
 
     <!--=====================================
-    MODAL PAGAR CUOTA
+    MODAL RECOGER PRESTAMO
     ======================================-->
 
     <div id="CancelarPrestamo" class="modal fade" role="dialog">
@@ -218,7 +218,7 @@ if($_SESSION["perfil"] == "Especial"){
                   
                     <span class="input-group-addon"><i class="fa fa-user"></i></span> 
 
-                    <input type="text" class="form-control input-xs" id="nombreCliente" name="nombreCliente" value="<?php echo $value["nombre_cliente"] ?>" readonly  required>
+                    <input type="text" class="form-control input-xs" id="nombreCliente" name="nombreCliente" value="" readonly  required>
 
                   </div>
 
@@ -234,8 +234,8 @@ if($_SESSION["perfil"] == "Especial"){
                     <!-- <span class="input-group-addon"><i class="fa fa-key"></i></span>  -->
 
                     <!-- <input type="number" class="form-control input-xs" id="numCouta" name="numCouta" readonly required> -->
-                    <input type="hidden" class="form-control input-xs" id="idPrestamo" name="idPrestamo" value="<?php echo $value["id_prestamo"] ?>" readonly required>
-                    <input type="hidden" class="form-control input-xs" id="cantidad_prestamo" name="cantidad_prestamo"value="<?php echo $value["monto"] ?>" readonly required>
+                    <input type="hidden" class="form-control input-xs" id="idPrestamo" name="idPrestamo" value="" readonly required>
+                    <input type="hidden" class="form-control input-xs" id="cantidad_prestamo" name="cantidad_prestamo"value="" readonly required>
                     
 
                   </div>
@@ -244,11 +244,6 @@ if($_SESSION["perfil"] == "Especial"){
 
                 <!-- ENTRADA PARA Cantidad a pagar -->
                 <?php
-                $saldoPendente =floatval($value["saldo_pendiente"]) ;
-                $interes = intval($value["tasa_interes"]);
-                $iteresAPagar = $saldoPendente*($interes/100);
-                $cantidadPagar = ($saldoPendente +$iteresAPagar);
-                  // var_dump($cantidadPagar);
                 
                 ?>
                 <div class="form-group col-lg-6">
@@ -258,7 +253,7 @@ if($_SESSION["perfil"] == "Especial"){
                   
                     <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
 
-                    <input type="number"  class="form-control input-xs" id="cantidad" name="cantidad"value="<?php echo $cantidadPagar ?>" readonly required>
+                    <input type="number"  class="form-control input-xs" id="cantidad" name="cantidad"value="" readonly required>
 
                   </div>
 
@@ -273,7 +268,7 @@ if($_SESSION["perfil"] == "Especial"){
                   
                     <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
 
-                    <input type="number" class="form-control input-xs" id="interesPagar" name="interesPagar"value="<?php echo $iteresAPagar ?>"  readonly required>
+                    <input type="number" class="form-control input-xs" id="interesPagar" name="interesPagar"value=""  readonly required>
 
                   </div>
 
@@ -288,7 +283,7 @@ if($_SESSION["perfil"] == "Especial"){
                   
                     <span class="input-group-addon"><i class="fa fa-dollar"></i></span> 
 
-                    <input type="number" class="form-control input-xs" id="capitalPagar" name="capitalPagar" value="<?php echo $saldoPendente ?>" readonly required>
+                    <input type="number" class="form-control input-xs" id="capitalPagar" name="capitalPagar" value="" readonly required>
 
                   </div>
 

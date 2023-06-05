@@ -50,7 +50,7 @@
 				<a href="cobros">
 
 					<i class="fa fa-list-ul"></i>
-					<span>Cobros</span>
+					<span>Cuotas</span>
 
 				</a>
 
@@ -66,6 +66,16 @@
 
 					<i class="fa fa-users"></i>
 					<span>Clientes</span>
+
+				</a>
+
+			</li>
+			<li>
+
+				<a href="codeudores">
+
+					<i class="fa fa-address-card"></i>
+					<span>Codeudores</span>
 
 				</a>
 

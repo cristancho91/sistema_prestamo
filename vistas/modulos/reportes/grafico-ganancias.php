@@ -14,7 +14,7 @@ $fechaFinal = null;
 
 }
 
-$respuesta = ControladorVentas::ctrRangoFechasVentas($fechaInicial, $fechaFinal);
+$respuesta = ControladorGanancias::ctrRangoFechasganancia($fechaInicial, $fechaFinal);
 $arrayFechas = array();
 $arrayVentas = array();
 $sumaGanancias = array();
@@ -22,13 +22,13 @@ $sumaGanancias = array();
 foreach ($respuesta as $key => $value) {
 
 	#Capturamos sólo el año y el mes
-	$fecha = substr($value["fecha"],0,7);
+	$fecha = substr($value["fecha_ganancia"],0,10);
 
 	#Introducir las fechas en arrayFechas
 	array_push($arrayFechas, $fecha);
 
 	#Capturamos las ganancias
-	$arrayVentas = array($fecha => $value["ganancia_venta"]);
+	$arrayVentas = array($fecha => $value["ganancia"]);
   
 	#Sumamos las ganancias que ocurrieron el mismo mes
 	foreach ($arrayVentas as $key => $value) {
@@ -61,7 +61,7 @@ GRÁFICO DE GANANCIAS
 
 	<div class="box-body border-radius-none nuevoGraficoVentas">
 
-		<div class="chart" id="line-chart-ventas" style="height: 250px;"></div>
+		<div class="chart" id="line-chart-ganancias" style="height: 250px;"></div>
 
   </div>
 
@@ -70,7 +70,7 @@ GRÁFICO DE GANANCIAS
 <script>
 	
  var line = new Morris.Line({
-    element          : 'line-chart-ventas',
+    element          : 'line-chart-ganancias',
     resize           : true,
     data             : [
 

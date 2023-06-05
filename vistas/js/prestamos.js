@@ -389,11 +389,73 @@ $(document).ready(function() {
 		IMPRIMIR FACTURA
 		=============================================*/
 
-		$(".tablas").on("click", ".btnImprimirFactura", function(){
+		$(".tablaPrestamos").on("click", ".btnImprimirFactura", function(){
 
-			var codigoVenta = $(this).attr("codigoVenta");
+			var codigoPrestamo = $(this).attr("codigoPrestamo");
+			// console.log(codigoPrestamo);
 
-			window.open("extensiones/factura/generaFactura.php?codigo="+codigoVenta, "_blank");
+			window.open("extensiones/factura/generaFactura.php?codigo="+codigoPrestamo, "_blank");
+
+		})
+		/*=============================================
+		RECOGER PRESTAMO
+		=============================================*/
+		$(".tablaPrestamos").on("click", ".btnCancelarPrestamo", function(){
+
+			var codigoPrestamo = $(this).attr("codigoPrestamo");
+
+			var datos = new FormData();
+			datos.append("idPrestamo", codigoPrestamo);
+
+			$.ajax({
+
+				url:"ajax/cobros.ajax.php",
+				method: "POST",
+				data: datos,
+				cache: false,
+				contentType: false,
+				processData: false,
+				dataType: "json",
+				success: function(respuesta){
+
+					// console.log(respuesta);
+					let saldoPendiente = respuesta["saldo_pendiente"];
+					let tasaInteres = respuesta["tasa_interes"]/100;
+					let monto = respuesta["monto"];
+
+					let interesPagar =(saldoPendiente*tasaInteres);
+					let cantidadPagar = saldoPendiente + interesPagar;
+
+					$("#idPrestamo").val(respuesta["id_prestamo"]);
+					$("#cantidad_prestamo").val(respuesta["monto"]);
+					$("#cantidad").val(cantidadPagar);
+					$("#interesPagar").val(interesPagar);
+					$("#capitalPagar").val(saldoPendiente);
+
+					let codigoCliente = respuesta["id_cliente"];
+					var datos2 = new FormData();
+					datos2.append("idCliente", codigoCliente);
+
+					$.ajax({
+
+						url:"ajax/cobros.ajax.php",
+						method: "POST",
+						data: datos2,
+						cache: false,
+						contentType: false,
+						processData: false,
+						dataType: "json",
+						success: function(respuesta){
+
+							$("#nombreCliente").val(respuesta["nombre"]);
+
+
+						}
+					})
+					
+				}
+
+			});
 
 		})
 

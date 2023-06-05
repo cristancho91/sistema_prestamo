@@ -11,20 +11,20 @@ class ModeloGanancia{
 
 		if($fechaInicial == null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id  ORDER BY id_prestamo ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
 
 			$stmt -> execute();
 
-			return $stmt -> fetchAll();	
+			return $stmt -> fetchAll(PDO::FETCH_ASSOC);	
 
 
 		}else if($fechaInicial == $fechaFinal){
 
-			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo like '%$fechaFinal%'");
+			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE fecha_ganancia like '%$fechaFinal%'");
 
 			$stmt -> execute();
 
-			return $stmt -> fetchAll();
+			return $stmt -> fetchAll(PDO::FETCH_ASSOC);
 
 		}else{
 
@@ -38,18 +38,18 @@ class ModeloGanancia{
 
 			if($fechaFinalMasUno == $fechaActualMasUno){
 
-				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
+				$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
 
 			}else{
 
 
-				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinal'");
+				$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinal'");
 
 			}
 		
 			$stmt -> execute();
 
-			return $stmt -> fetchAll();
+			return $stmt -> fetchAll(PDO::FETCH_ASSOC);
 
 		}
 
@@ -58,20 +58,20 @@ class ModeloGanancia{
 
         if($fechaInicial == null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id  ORDER BY id_prestamo ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT SUM(ganancia) AS ganancias FROM $tabla ");
 
 			$stmt -> execute();
 
-			return $stmt -> fetchAll();	
+			return $stmt -> fetch(PDO::FETCH_ASSOC);	
 
 
 		}else if($fechaInicial == $fechaFinal){
 
-			$stmt = Conexion::conectar()->prepare("SELECT SUM(ganancia) AS ganancias FROM `ganancia` WHERE fecha_ganancia LIKE '%$fechaFinal%'");
+			$stmt = Conexion::conectar()->prepare("SELECT SUM(ganancia) AS ganancias FROM $tabla WHERE fecha_ganancia LIKE '%$fechaFinal%'");
 
 			$stmt -> execute();
 
-			return $stmt -> fetch();
+			return $stmt -> fetch(PDO::FETCH_ASSOC);
 
 		}else{
 
@@ -85,19 +85,42 @@ class ModeloGanancia{
 
 			if($fechaFinalMasUno == $fechaActualMasUno){
 
-				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
+				$stmt = Conexion::conectar()->prepare("SELECT SUM(ganancia) AS ganancias FROM $tabla WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
 
 			}else{
 
 
-				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinal'");
+				$stmt = Conexion::conectar()->prepare("SSELECT SUM(ganancia) AS ganancias FROM $tabla WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinal'");
 
 			}
 		
 			$stmt -> execute();
 
-			return $stmt -> fetchAll();
+			return $stmt -> fetch(PDO::FETCH_ASSOC);
 
         }
     }
+
+
+	static public function mdlSumarGananciasPorPrestamo($tabla,$item,$valor){
+		if($item == null){
+
+			$stmt = Conexion::conectar()->prepare("SELECT SUM(ganancia) AS ganancia FROM $tabla WHERE id_prestamo = :id_prestamo");
+			$stmt -> bindParam(":id_prestamo", $valor, PDO::PARAM_INT);
+
+			$stmt -> execute();
+
+			return $stmt -> fetchAll(PDO::FETCH_ASSOC);	
+
+
+		}else{
+			$stmt = Conexion::conectar()->prepare("SELECT SUM(ganancia) AS ganancia FROM $tabla WHERE $item = :$item AND id_pago= 0");
+
+			$stmt -> bindParam(":".$item, $valor, PDO::PARAM_INT);
+
+			$stmt -> execute();
+
+			return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+		}
+	}
 }

@@ -27,4 +27,12 @@ class ControladorGanancias{
 		return $respuesta;
 
     }
+
+	static public function ctrSumarGananciasPorPrestamo($item, $valor){
+		$tabla = "ganancia";
+
+		$respuesta = ModeloGanancia::mdlSumarGananciasPorPrestamo($tabla,$item,$valor);
+
+		return $respuesta;
+	}
 }

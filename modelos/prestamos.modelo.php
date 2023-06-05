@@ -110,7 +110,8 @@ class ModeloPrestamos{
 				// Calcular el monto de la cuota (capital + interés)
 				$capital = $datos["nuevoPrestamo"];
 				$interes = $datos["interes"] / 100;
-				$cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cuotas_a_crear)));
+				// $cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cuotas_a_crear)));
+				$cuota = ($capital/$cuotas_a_crear)+ ($capital*$interes);
 
 				
 
@@ -369,8 +370,9 @@ class ModeloPrestamos{
 				$stmt2->execute();
 				
 				//insertamos las ganancias
-				$stmt3 = $pdo->prepare("INSERT INTO ganancia (id_pago,ganancia) VALUES (:id_pago,:ganancia)");
+				$stmt3 = $pdo->prepare("INSERT INTO ganancia (id_prestamo,id_pago,ganancia) VALUES (:id_prestamo,:id_pago,:ganancia)");
 
+				$stmt3->bindParam(":id_prestamo", $datos["id_prestamo"], PDO::PARAM_INT);
 				$stmt3->bindParam(":id_pago", $id_pago, PDO::PARAM_INT);
 				$stmt3->bindParam(":ganancia", $datos["iteresPagar"], PDO::PARAM_INT);
 				

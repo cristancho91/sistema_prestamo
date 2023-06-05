@@ -19,7 +19,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
     
     <h1>
       
-      Reportes de ventas y ganancias
+      Reportes de Créditos y Ganancias
     
     </h1>
 
@@ -27,7 +27,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
       
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
       
-      <li class="active">Reportes de ventas</li>
+      <li class="active">Reportes de Créditos</li>
     
     </ol>
 
@@ -41,7 +41,7 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
         <div class="input-group">
 
-          <button type="button" class="btn btn-default" id="daterange-btn2">
+          <button type="button" class="btn btn-success" id="daterange-btn2">
            
             <span>
               <i class="fa fa-calendar"></i> Rango de fecha
@@ -73,49 +73,51 @@ if($_SESSION["perfil"] == "Especial" || $_SESSION["perfil"] == "Vendedor"){
 
           </a>
 
+          
         </div>
-         
-      </div>
 
+        </div>
+
+      
       <div class="box-body">
         
         <div class="row">
 
-          <div class="col-xs-12">
+          <div class="col-lg-12 col-md-6 col-xs-12" id="grafico_prestamos" >
             
+            <?php
+
+            include "reportes/grafico-prestamos.php";
+
+            ?>
+
+          </div>
+
+           <div class="col-lg-12 col-md-6 col-xs-12">
+             
             <?php
 
             include "reportes/grafico-ganancias.php";
 
             ?>
 
-          </div>
+           </div>
 
-           <div class="col-md-6 col-xs-12">
+            <div class="col-lg-12 col-md-6 col-xs-12">
              
             <?php
 
-            include "reportes/productos-mas-vendidos.php";
+            // include "reportes/vendedores.php";
 
             ?>
 
            </div>
 
-            <div class="col-md-6 col-xs-12">
+           <div class="col-lg-12 col-md-6 col-xs-12">
              
             <?php
 
-            include "reportes/vendedores.php";
-
-            ?>
-
-           </div>
-
-           <div class="col-md-6 col-xs-12">
-             
-            <?php
-
-            include "reportes/compradores.php";
+            // include "reportes/compradores.php";
 
             ?>
 
