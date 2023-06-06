@@ -19,6 +19,8 @@ require_once "../../modelos/abonos.modelo.php";
 require_once "../../controladores/ganancias.controlador.php";
 require_once "../../modelos/ganancia.modelo.php";
 
+require_once "../../controladores/codeudores.controlador.php";
+require_once "../../modelos/codeudores.modelo.php";
 
 class imprimirFactura{
 
@@ -35,6 +37,7 @@ class imprimirFactura{
 		$respuestaPrestamo = ControladorPrestamos::ctrMostrarPrestamos($itemPrestamo, $valorPrestamo);
 
 		$idCliente = $respuestaPrestamo["id_cliente"];
+		$idCodeudor = $respuestaPrestamo["id_codeudor"];
 		$idPrestador = $respuestaPrestamo["id_prestador"];
 		$codigoPrestamo = $respuestaPrestamo["codigo_prestamo"];
 		$monto = $respuestaPrestamo["monto"];
@@ -78,6 +81,10 @@ class imprimirFactura{
 		// ---------------------------------------------------------
 		$respuestaGanancia = ControladorGanancias::ctrSumarGananciasPorPrestamo($itemPrestamo,$valorPrestamo);
 		$gananciaPrestamo= $respuestaGanancia[0]["ganancia"]; 
+		// ---------------------------------------------------------
+		//codeudor
+		$respuestaCodeudor = ControladorCodeudores::ctrMostrarCodeudores($itemVendedor,$idCodeudor);
+
 
 		// ---------------------------------------------------------
 		$capitalPagado= $monto-$saldoPendiente;
@@ -86,6 +93,8 @@ class imprimirFactura{
 		$totalCuotas = 0;
 		$cuotaApagar = 0;
 		$diasMora = 0;
+		// ---------------------------------------------------------
+
 
 		//DIAS EN MORA
 		// ---------------------------------------------------------
@@ -330,6 +339,27 @@ class imprimirFactura{
 								<tr>
 									<td><label><strong>Nombre:</strong> </label> <p><?php echo $respuestaCliente['nombre']; ?></p></td>
 									<td><label><strong>Dirección:</strong> </label> <p><?php echo $respuestaCliente['direccion']; ?></p></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+
+				</tr>
+			</table>
+			<!-- informacion codeudor  -->
+			<table id="factura_cliente">
+				<tr>
+					<td class="info_cliente">
+						<div class="round">
+							<span class="h3">Información Codeudor</span>
+							<table class="datos_cliente">
+								<tr>
+									<td><label><strong>CC:</strong> </label><p><?php echo $respuestaCodeudor['documento']; ?></p></td>
+									<td><label><strong>Teléfono:</strong> </label> <p><?php echo $respuestaCodeudor['telefono']; ?></p></td>
+								</tr>
+								<tr>
+									<td><label><strong>Nombre:</strong> </label> <p><?php echo $respuestaCodeudor['nombre']; ?></p></td>
+									<td><label><strong>Dirección:</strong> </label> <p><?php echo $respuestaCodeudor['direccion']; ?></p></td>
 								</tr>
 							</table>
 						</div>

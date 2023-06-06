@@ -87,6 +87,7 @@ if($_SESSION["perfil"] == "Especial"){
                     <input type="text" class="form-control" id="nuevoVendedor" value="<?php echo $vendedor["nombre"]; ?>" readonly>
 
                     <input type="hidden" name="idVendedor" value="<?php echo $vendedor["id"]; ?>">
+                    <input type="hidden" name="idPrestamo" value="<?php echo $valor; ?>">
 
                   </div>
 
@@ -117,6 +118,7 @@ if($_SESSION["perfil"] == "Especial"){
                   <div class="input-group">
                     
                     <span class="input-group-addon"><i class="fa fa-users"></i></span>
+                    <input type="hidden" name="idClienteViejo" value="<?php echo $cliente["id"]; ?>">
                     
                     <select class="form-control" id="seleccionarCliente" name="seleccionarCliente" required>
 
@@ -144,6 +146,44 @@ if($_SESSION["perfil"] == "Especial"){
                   </div>
                 
                 </div>
+
+                <!--=====================================
+                ENTRADA DEL CODEUDOR
+                ======================================--> 
+
+                <div class="form-group">
+                  
+                  <div class="input-group ">
+                    
+                    <span class="input-group-addon "><i class="fa fa-address-card"></i></span>
+                    
+                    <select class="form-control" id="seleccionarCodeudor" name="seleccionarCodeudor" required>
+
+                    <!-- <option value="">Seleccionar Codeudor</option> -->
+
+                    <?php
+
+                      $item = null;
+                      $valor = null;
+
+                      $categorias = ControladorCodeudores::ctrMostrarCodeudores($item, $valor);
+
+                       foreach ($categorias as $key => $value) {
+
+                         echo '<option value="'.$value["id"].'">'.$value["nombre"].'</option>';
+
+                       }
+
+                    ?>
+
+                    </select>
+                    
+                    <span class="input-group-addon"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalAgregarCodeudor" data-dismiss="modal">Agregar Codeudor</button></span>
+                  
+                  </div>
+                
+                </div>
+
 
                 <!--=====================================
                 ENTRADA PARA AGREGAR prestamo
@@ -425,3 +465,123 @@ MODAL AGREGAR CLIENTE
   </div>
 
 </div>
+
+<!--=====================================
+MODAL AGREGAR CODEUDOR
+======================================-->
+
+<div id="modalAgregarCodeudor" class="modal fade" role="dialog">
+  
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+
+      <form role="form" method="post">
+
+        <!--=====================================
+        CABEZA DEL MODAL
+        ======================================-->
+
+        <div class="modal-header" style="background:#3c8dbc; color:white">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+          <h4 class="modal-title">Agregar Codeudor</h4>
+
+        </div>
+
+        <!--=====================================
+        CUERPO DEL MODAL
+        ======================================-->
+
+        <div class="modal-body">
+
+          <div class="box-body">
+
+            <!-- ENTRADA PARA EL NOMBRE -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-user"></i></span> 
+
+                <input type="text" class="form-control input-lg" name="nuevoCodeudor" placeholder="Ingresar nombre" required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA EL DOCUMENTO ID -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-key"></i></span> 
+
+                <input type="number" min="0" class="form-control input-lg" name="nuevoDocumento" placeholder="Ingresar documento" required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA EL TELÉFONO -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-phone"></i></span> 
+
+                <input type="text" class="form-control input-lg" name="telefono" placeholder="Ingresar teléfono" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
+
+              </div>
+
+            </div>
+
+            <!-- ENTRADA PARA LA DIRECCIÓN -->
+            
+            <div class="form-group">
+              
+              <div class="input-group">
+              
+                <span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
+
+                <input type="text" class="form-control input-lg" name="direccion" placeholder="Ingresar dirección" required>
+
+              </div>
+
+            </div>
+  
+          </div>
+
+        </div>
+
+        <!--=====================================
+        PIE DEL MODAL
+        ======================================-->
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
+
+          <button type="submit" class="btn btn-primary">Guardar Codeudor</button>
+
+        </div>
+
+      </form>
+
+      <?php
+
+        $crearCodeudor = new ControladorCodeudores();
+        $crearCodeudor -> ctrCrearCodeudor();
+
+      ?>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- FIN DEL MODAL DE CREAR CODEUDOR -->

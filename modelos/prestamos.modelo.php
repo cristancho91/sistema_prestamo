@@ -49,9 +49,10 @@ class ModeloPrestamos{
 
 			
 
-			$stmt = $pdo->prepare("INSERT INTO $tabla(id_cliente,  id_prestador,codigo_prestamo, monto, tasa_interes, fecha_prestamo, tiempo_en_meses,forma_pago,saldo_pendiente, estado_prestamo) VALUES ( :id_cliente, :id_prestador,:codigo_prestamo, :monto, :tasa_interes, :fecha_prestamo, :tiempo_en_meses,:forma_pago, :saldo_pendiente, :estado_prestamo)");
+			$stmt = $pdo->prepare("INSERT INTO $tabla(id_cliente, id_codeudor,  id_prestador,codigo_prestamo, monto, tasa_interes, fecha_prestamo, tiempo_en_meses,forma_pago,saldo_pendiente, estado_prestamo) VALUES ( :id_cliente,:id_codeudor, :id_prestador,:codigo_prestamo, :monto, :tasa_interes, :fecha_prestamo, :tiempo_en_meses,:forma_pago, :saldo_pendiente, :estado_prestamo)");
 
 			$stmt->bindParam(":id_cliente", $datos["id_cliente"], PDO::PARAM_INT);
+			$stmt->bindParam(":id_codeudor", $datos["id_codeudor"], PDO::PARAM_INT);
 			$stmt->bindParam(":id_prestador", $datos["id_vendedor"], PDO::PARAM_INT);
 			$stmt->bindParam(":codigo_prestamo", $datos["codigo"], PDO::PARAM_STR);
 			$stmt->bindParam(":monto", $datos["nuevoPrestamo"], PDO::PARAM_INT);
@@ -108,10 +109,11 @@ class ModeloPrestamos{
 
 
 				// Calcular el monto de la cuota (capital + interés)
+				$saldoPendiente = $datos["saldo_pendiente"];
 				$capital = $datos["nuevoPrestamo"];
 				$interes = $datos["interes"] / 100;
-				// $cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cuotas_a_crear)));
-				$cuota = ($capital/$cuotas_a_crear)+ ($capital*$interes);
+				$cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cuotas_a_crear)));
+				// $cuota = ($capital/$cuotas_a_crear)+ ($capital*$interes);
 
 				
 
@@ -120,9 +122,9 @@ class ModeloPrestamos{
 				$quincena = 0;
 				for ($i = 1; $i <= $cuotas_a_crear; $i++) {
 					// Calcular el interés y capital a pagar para esta cuota
-					$interes_a_pagar = $datos["saldo_pendiente"] * $interes;
+					$interes_a_pagar = $saldoPendiente * $interes;
 					$capital_a_pagar = $cuota - $interes_a_pagar;
-					$cantidad_pendiente = $datos["saldo_pendiente"] - $capital_a_pagar;
+					$cantidad_pendiente = $saldoPendiente - $capital_a_pagar;
 
 					// Insertar la cuota en la tabla
 					$stmt3->bindParam(":id_prestamo", $id_prestamo, PDO::PARAM_INT);
@@ -146,7 +148,7 @@ class ModeloPrestamos{
 					$stmt3->execute();
 
 					// Actualizar el saldo pendiente
-					$datos["saldo_pendiente"] = $cantidad_pendiente;
+					$saldoPendiente = $cantidad_pendiente;
 				}
 
 				// Confirmar la transacción
@@ -171,32 +173,49 @@ class ModeloPrestamos{
 	}
 
 	/*=============================================
-	EDITAR VENTA
+	EDITAR PRESTAMO
 	=============================================*/
 
 	static public function mdlEditarPrestamo($tabla, $datos){
+		$pdo = Conexion::conectar();
+		$pdo->beginTransaction();
 
-		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET  id_cliente = :id_cliente, id_vendedor = :id_vendedor, productos = :productos, impuesto = :impuesto, neto = :neto, total= :total, metodo_pago = :metodo_pago WHERE codigo = :codigo");
+		try {
 
-		$stmt->bindParam(":codigo", $datos["codigo"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_cliente", $datos["id_cliente"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_vendedor", $datos["id_vendedor"], PDO::PARAM_INT);
-		$stmt->bindParam(":productos", $datos["productos"], PDO::PARAM_STR);
-		$stmt->bindParam(":impuesto", $datos["impuesto"], PDO::PARAM_STR);
-		$stmt->bindParam(":neto", $datos["neto"], PDO::PARAM_STR);
-		$stmt->bindParam(":total", $datos["total"], PDO::PARAM_STR);
-		$stmt->bindParam(":metodo_pago", $datos["metodo_pago"], PDO::PARAM_STR);
+			$stmt = $pdo->prepare("UPDATE $tabla SET  id_cliente = :id_cliente,id_codeudor = :id_codeudor, id_prestador = :id_prestador, monto = :monto, tasa_interes = :tasa_interes, fecha_prestamo = :fecha_prestamo, tiempo_en_meses= :tiempo_en_meses, forma_pago = :forma_pago, saldo_pendiente= :saldo_pendiente WHERE id_prestamo = :id_prestamo");
 
-		if($stmt->execute()){
+			$stmt->bindParam(":id_prestamo", $datos["id_prestamo"], PDO::PARAM_INT);
+			$stmt->bindParam(":id_cliente", $datos["id_cliente"], PDO::PARAM_INT);
+			$stmt->bindParam(":id_codeudor", $datos["codeudor"], PDO::PARAM_INT);
+			$stmt->bindParam(":id_prestador", $datos["id_vendedor"], PDO::PARAM_INT);
+			$stmt->bindParam(":monto", $datos["monto"], PDO::PARAM_INT);
+			$stmt->bindParam(":tasa_interes", $datos["tasa_interes"], PDO::PARAM_INT);
+			$stmt->bindParam(":fecha_prestamo", $datos["fecha_prestamo"], PDO::PARAM_STR);
+			$stmt->bindParam(":tiempo_en_meses", $datos["plazo"], PDO::PARAM_INT);
+			$stmt->bindParam(":forma_pago", $datos["forma_pago"], PDO::PARAM_STR);
+			$stmt->bindParam(":saldo_pendiente", $datos["monto"], PDO::PARAM_INT);
 
-			return "ok";
+			if($stmt->execute()){
 
-		}else{
+				// Confirmar la transacción
+				$pdo->commit();
+				return "ok";
 
-			return "error";
-		
+			}else{
+
+				return "error";
+			
+			}
+
+			$stmt = null;
+		} catch (PDOException $e) {
+					
+			$pdo->rollBack();
+			return "error".$e->getMessage();
 		}
-		$stmt = null;
+
+		
+	
 
 	}
 
@@ -232,7 +251,7 @@ class ModeloPrestamos{
 
 		if($fechaInicial == null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id  ORDER BY id_prestamo ASC");
+			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, codeudores.nombre AS nombre_codeudor, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN codeudores ON prestamos.id_codeudor = codeudores.id JOIN usuarios ON prestamos.id_prestador = usuarios.id  ORDER BY id_prestamo ASC");
 
 			$stmt -> execute();
 
@@ -241,7 +260,7 @@ class ModeloPrestamos{
 
 		}else if($fechaInicial == $fechaFinal){
 
-			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo like '%$fechaFinal%'");
+			$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente,codeudores.nombre AS nombre_codeudor, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN codeudores ON prestamos.id_codeudor = codeudores.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo like '%$fechaFinal%'");
 
 			$stmt -> execute();
 
@@ -259,12 +278,12 @@ class ModeloPrestamos{
 
 			if($fechaFinalMasUno == $fechaActualMasUno){
 
-				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
+				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente,codeudores.nombre AS nombre_codeudor, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN codeudores ON prestamos.id_codeudor = codeudores.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
 
 			}else{
 
 
-				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinal'");
+				$stmt = Conexion::conectar()->prepare("SELECT $tabla.*, clientes.nombre AS nombre_cliente,codeudores.nombre AS nombre_codeudor, usuarios.nombre AS nombre_usuario FROM $tabla JOIN clientes ON prestamos.id_cliente = clientes.id JOIN codeudores ON prestamos.id_codeudor = codeudores.id JOIN usuarios ON prestamos.id_prestador = usuarios.id WHERE fecha_prestamo BETWEEN '$fechaInicial' AND '$fechaFinal'");
 
 			}
 		

@@ -93,6 +93,7 @@ class ControladorPrestamos{
 
 			$datos = array("id_vendedor"=>$_POST["idVendedor"],
 						   "id_cliente"=>$_POST["seleccionarCliente"],
+						   "id_codeudor"=>$_POST["seleccionarCodeudor"],
 						   "codigo"=>$_POST["codigoPrestamo"],
 						   "nuevoPrestamo"=>$_POST["nuevoPrestamo"],
 						   "nuevoMetodoPago"=>$_POST["nuevoMetodoPago"],
@@ -139,7 +140,7 @@ class ControladorPrestamos{
 
 	static public function ctrEditarPrestamo(){
 
-		if(isset($_POST["editarVenta"])){
+		if(isset($_POST["idPrestamo"])){
 
 			/*=============================================
 			FORMATEAR TABLA DE PRESTAMOS Y  CLIENTES
@@ -147,122 +148,28 @@ class ControladorPrestamos{
 			$tabla = "prestamos";
 
 			$item = "id_prestamo";
-			$valor = $_POST["editarVenta"];
+			$valor = $_POST["idPrestamo"];
 
-			$traerVenta = ModeloPrestamos::mdlMostrarPrestamos($tabla, $item, $valor);
+			$traerPrestamo = ModeloPrestamos::mdlMostrarPrestamos($tabla, $item, $valor);
+			$saldoPendiente = $traerPrestamo["saldo_pendiente"];
+			$tablaClientes = "clientes";
+			$itemCliente = "id";
+			$valorCliente = $_POST["seleccionarCliente"];
+			$traerCliente = ModeloClientes::mdlMostrarClientes($tablaClientes, $itemCliente, $valorCliente);
+			$compraCliente = $traerCliente["compras"];
+			
+			$compraCliente1 = 0;
 
-			/*=============================================
-			REVISAR SI VIENE PRODUCTOS EDITADOS
-			=============================================*/
+			if($_POST["idClienteViejo"] != $_POST["seleccionarCliente"]){
 
-			if($_POST["listaProductos"] == ""){
+				$compraCliente1 =$compraCliente + 1;
 
-				$listaProductos = $traerVenta["productos"];
-				$cambioProducto = false;
+			
+			}	else{;
 
-
-			}else{
-
-				$listaProductos = $_POST["listaProductos"];
-				$cambioProducto = true;
-			}
-
-			if($cambioProducto){
-
-				$productos =  json_decode($traerVenta["productos"], true);
-
-				$totalProductosComprados = array();
-
-				foreach ($productos as $key => $value) {
-
-					array_push($totalProductosComprados, $value["cantidad"]);
-					
-					$tablaProductos = "productos";
-
-					$item = "id";
-					$valor = $value["id"];
-					$orden = "id";
-
-					$traerCobros = ModeloCobros::mdlMostrarCobros($tablaProductos, $item, $valor, $orden);
-
-					$item1a = "ventas";
-					$valor1a = $traerCobros["ventas"] - $value["cantidad"];
-
-					$nuevasVentas = ModeloCobros::mdlActualizarCobro($tablaProductos, $item1a, $valor1a, $valor);
-
-					$item1b = "stock";
-					$valor1b = $value["cantidad"] + $traerCobros["stock"];
-
-					$nuevoStock = ModeloCobros::mdlActualizarCobro($tablaProductos, $item1b, $valor1b, $valor);
-
-				}
-
-				$tablaClientes = "clientes";
-
-				$itemCliente = "id";
-				$valorCliente = $_POST["seleccionarCliente"];
-
-				$traerCliente = ModeloClientes::mdlMostrarClientes($tablaClientes, $itemCliente, $valorCliente);
-
-				$item1a = "compras";
-				$valor1a = $traerCliente["compras"] - array_sum($totalProductosComprados);
-
-				$comprasCliente = ModeloClientes::mdlActualizarCliente($tablaClientes, $item1a, $valor1a, $valorCliente);
-
-				/*=============================================
-				ACTUALIZAR LAS COMPRAS DEL CLIENTE Y REDUCIR EL STOCK Y AUMENTAR LAS VENTAS DE LOS PRODUCTOS
-				=============================================*/
-
-				$listaProductos_2 = json_decode($listaProductos, true);
-
-				$totalProductosComprados_2 = array();
-
-				foreach ($listaProductos_2 as $key => $value) {
-
-					array_push($totalProductosComprados_2, $value["cantidad"]);
-					
-					$tablaProductos_2 = "productos";
-
-					$item_2 = "id";
-					$valor_2 = $value["id"];
-					$orden = "id";
-
-					$traerCobros_2 = ModeloCobros::mdlMostrarCobros($tablaProductos_2, $item_2, $valor_2, $orden);
-
-					$item1a_2 = "ventas";
-					$valor1a_2 = $value["cantidad"] + $traerCobros_2["ventas"];
-
-					$nuevasVentas_2 = ModeloCobros::mdlActualizarcobro($tablaProductos_2, $item1a_2, $valor1a_2, $valor_2);
-
-					$item1b_2 = "stock";
-					$valor1b_2 = $traerCobros_2["stock"] - $value["cantidad"];
-
-					$nuevoStock_2 = ModeloCobros::mdlActualizarCobro($tablaProductos_2, $item1b_2, $valor1b_2, $valor_2);
-
-				}
-
-				$tablaClientes_2 = "clientes";
-
-				$item_2 = "id";
-				$valor_2 = $_POST["seleccionarCliente"];
-
-				$traerCliente_2 = ModeloClientes::mdlMostrarClientes($tablaClientes_2, $item_2, $valor_2);
-
-				$item1a_2 = "compras";
-				$valor1a_2 = array_sum($totalProductosComprados_2) + $traerCliente_2["compras"];
-
-				$comprasCliente_2 = ModeloClientes::mdlActualizarCliente($tablaClientes_2, $item1a_2, $valor1a_2, $valor_2);
-
-				$item1b_2 = "ultima_compra";
-
-				date_default_timezone_set('America/Bogota');
-
-				$fecha = date('Y-m-d');
-				$hora = date('H:i:s');
-				$valor1b_2 = $fecha.' '.$hora;
-
-				$fechaCliente_2 = ModeloClientes::mdlActualizarCliente($tablaClientes_2, $item1b_2, $valor1b_2, $valor_2);
-
+				
+				$compraCliente1 = $compraCliente -1;
+				
 			}
 
 			/*=============================================
@@ -271,12 +178,15 @@ class ControladorPrestamos{
 
 			$datos = array("id_vendedor"=>$_POST["idVendedor"],
 						   "id_cliente"=>$_POST["seleccionarCliente"],
-						   "codigo"=>$_POST["editarVenta"],
-						   "productos"=>$listaProductos,
-						   "impuesto"=>$_POST["nuevoPrecioImpuesto"],
-						   "neto"=>$_POST["nuevoPrecioNeto"],
-						   "total"=>$_POST["totalVenta"],
-						   "metodo_pago"=>$_POST["listaMetodoPago"]);
+						   "id_prestamo"=>$_POST["idPrestamo"],
+						   "codigo"=>$_POST["nuevoPrestamo"],
+						   "comprasCliente"=>$compraCliente1,
+						   "codeudor"=>$_POST["seleccionarCodeudor"],
+						   "monto"=>$_POST["editarMonto"],
+						   "plazo"=>$_POST["nuevoMetodoPago"],
+						   "tasa_interes"=>$_POST["interes"],
+						   "fecha_prestamo"=>$_POST["fechaPrestamo"],
+						   "forma_pago"=>$_POST["formaPago"]);
 
 
 			$respuesta = ModeloPrestamos::mdlEditarPrestamo($tabla, $datos);
@@ -289,13 +199,13 @@ class ControladorPrestamos{
 
 				swal({
 					  type: "success",
-					  title: "La venta ha sido editada correctamente",
+					  title: "El prestamo ha sido editado correctamente",
 					  showConfirmButton: true,
 					  confirmButtonText: "Cerrar"
 					  }).then((result) => {
 								if (result.value) {
 
-								window.location = "ventas";
+								window.location = "prestamos";
 
 								}
 							})
@@ -306,7 +216,10 @@ class ControladorPrestamos{
 
 		}
 
+			
+
 	}
+
 
 
 	/*=============================================

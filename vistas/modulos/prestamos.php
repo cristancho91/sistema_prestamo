@@ -72,7 +72,7 @@ if($_SESSION["perfil"] == "Especial"){
            <th style="width:10px">#</th>
            <th>Código</th>
            <th>Nombre cliente</th>
-           <!-- <th>Nombre Prestamista</th> -->
+           <th>Nombre Codeudor</th>
            <th>Prestamo</th>
            <th>Interés</th>
            <th>Tiempo (meses)</th>
@@ -111,6 +111,7 @@ if($_SESSION["perfil"] == "Especial"){
                   <td>'.($key+1).'</td>
                   <td>'.$value["codigo_prestamo"].'</td>
                   <td>'.$value["nombre_cliente"].'</td>
+                  <td>'.$value["nombre_codeudor"].'</td>
 
                   <td>$ '.number_format($value["monto"],0).'</td>
 

@@ -78,8 +78,8 @@ class ModeloAbonos{
 			
 			$interes = $datos["tasaInteres"] / 100;
 			
-			// $cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cantidad_cuotas)));
-			$cuota = ($capital/$cantidad_cuotas)+ ($capital*$interes);
+			$cuota = $capital * ($interes / (1 - pow(1 + $interes, -$cantidad_cuotas)));
+			// $cuota = ($capital/$cantidad_cuotas)+ ($capital*$interes);
 
 
 			//verificamos si solo pago interes o interes y algo de capital

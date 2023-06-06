@@ -156,6 +156,43 @@ if($_SESSION["perfil"] == "Especial"){
                 </div>
 
                 <!--=====================================
+                ENTRADA DEL CODEUDOR
+                ======================================--> 
+
+                <div class="form-group">
+                  
+                  <div class="input-group">
+                    
+                    <span class="input-group-addon"><i class="fa fa-address-card"></i></span>
+                    
+                    <select class="form-control" id="seleccionarCodeudor" name="seleccionarCodeudor" required>
+
+                    <option value="">Seleccionar Codeudor</option>
+
+                    <?php
+
+                      $item = null;
+                      $valor = null;
+
+                      $categorias = ControladorCodeudores::ctrMostrarCodeudores($item, $valor);
+
+                       foreach ($categorias as $key => $value) {
+
+                         echo '<option value="'.$value["id"].'">'.$value["nombre"].'</option>';
+
+                       }
+
+                    ?>
+
+                    </select>
+                    
+                    <span class="input-group-addon"><button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalAgregarCodeudor" data-dismiss="modal">Agregar Codeudor</button></span>
+                  
+                  </div>
+                
+                </div>
+
+                <!--=====================================
                 ENTRADA PARA AGREGAR prestamo
                 ======================================-->
                 <div class="input-group">
@@ -165,24 +202,6 @@ if($_SESSION["perfil"] == "Especial"){
                   <input type ="number" class="form-control nuevoPrestamo"  name="nuevoPrestamo" value="" placeholder="introduce la cantidad a prestar..."  required>
 
                 </div>
-
-                <!--=====================================
-                ENTRADA PARA AGREGAR PRODUCTO
-                ======================================--> 
-
-                <!-- <div class="form-group row nuevoProducto">
-
-                
-
-                </div>
-
-                <input type="hidden" id="listaProductos" name="listaProductos"> -->
-
-                <!--=====================================
-                BOTÓN PARA AGREGAR PRODUCTO
-                ======================================-->
-
-                <!-- <button type="button" class="btn btn-default hidden-lg btnAgregarProducto">Agregar producto</button>-->
 
                 <hr> 
 
@@ -293,10 +312,10 @@ if($_SESSION["perfil"] == "Especial"){
 </div>
 
 <!--=====================================
-MODAL AGREGAR CLIENTE
+MODAL AGREGAR CODEUDOR
 ======================================-->
 
-<div id="modalAgregarCliente" class="modal fade" role="dialog">
+<div id="modalAgregarCodeudor" class="modal fade" role="dialog">
   
   <div class="modal-dialog">
 
@@ -312,7 +331,7 @@ MODAL AGREGAR CLIENTE
 
           <button type="button" class="close" data-dismiss="modal">&times;</button>
 
-          <h4 class="modal-title">Agregar cliente</h4>
+          <h4 class="modal-title">Agregar Codeudor</h4>
 
         </div>
 
@@ -332,7 +351,7 @@ MODAL AGREGAR CLIENTE
               
                 <span class="input-group-addon"><i class="fa fa-user"></i></span> 
 
-                <input type="text" class="form-control input-lg" name="nuevoCliente" placeholder="Ingresar nombre" required>
+                <input type="text" class="form-control input-lg" name="nuevoCodeudor" placeholder="Ingresar nombre" required>
 
               </div>
 
@@ -346,21 +365,7 @@ MODAL AGREGAR CLIENTE
               
                 <span class="input-group-addon"><i class="fa fa-key"></i></span> 
 
-                <input type="number" min="0" class="form-control input-lg" name="nuevoDocumentoId" placeholder="Ingresar documento" required>
-
-              </div>
-
-            </div>
-
-            <!-- ENTRADA PARA EL EMAIL -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span> 
-
-                <input type="email" class="form-control input-lg" name="nuevoEmail" placeholder="Ingresar email" required>
+                <input type="number" min="0" class="form-control input-lg" name="nuevoDocumento" placeholder="Ingresar documento" required>
 
               </div>
 
@@ -374,7 +379,7 @@ MODAL AGREGAR CLIENTE
               
                 <span class="input-group-addon"><i class="fa fa-phone"></i></span> 
 
-                <input type="text" class="form-control input-lg" name="nuevoTelefono" placeholder="Ingresar teléfono" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
+                <input type="text" class="form-control input-lg" name="telefono" placeholder="Ingresar teléfono" data-inputmask="'mask':'(999) 999-9999'" data-mask required>
 
               </div>
 
@@ -388,21 +393,7 @@ MODAL AGREGAR CLIENTE
               
                 <span class="input-group-addon"><i class="fa fa-map-marker"></i></span> 
 
-                <input type="text" class="form-control input-lg" name="nuevaDireccion" placeholder="Ingresar dirección" required>
-
-              </div>
-
-            </div>
-
-             <!-- ENTRADA PARA LA FECHA DE NACIMIENTO -->
-            
-            <div class="form-group">
-              
-              <div class="input-group">
-              
-                <span class="input-group-addon"><i class="fa fa-calendar"></i></span> 
-
-                <input type="text" class="form-control input-lg" name="nuevaFechaNacimiento" placeholder="Ingresar fecha nacimiento" data-inputmask="'alias': 'yyyy/mm/dd'" data-mask required>
+                <input type="text" class="form-control input-lg" name="direccion" placeholder="Ingresar dirección" required>
 
               </div>
 
@@ -420,7 +411,7 @@ MODAL AGREGAR CLIENTE
 
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
-          <button type="submit" class="btn btn-primary">Guardar cliente</button>
+          <button type="submit" class="btn btn-primary">Guardar Codeudor</button>
 
         </div>
 
@@ -428,8 +419,8 @@ MODAL AGREGAR CLIENTE
 
       <?php
 
-        $crearCliente = new ControladorClientes();
-        $crearCliente -> ctrCrearCliente();
+        $crearCodeudor = new ControladorCodeudores();
+        $crearCodeudor -> ctrCrearCodeudor();
 
       ?>
 
@@ -438,3 +429,4 @@ MODAL AGREGAR CLIENTE
   </div>
 
 </div>
+
