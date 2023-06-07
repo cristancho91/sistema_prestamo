@@ -78,12 +78,12 @@ $(".daterangepicker.opensright .ranges li").on("click", function(){
       var fechaInicial = año+"-0"+mes+"-"+dia;
       var fechaFinal = año+"-0"+mes+"-"+dia;
 
-    }else if(dia < 10){
+    } if(dia < 10){
 
       var fechaInicial = año+"-"+mes+"-0"+dia;
       var fechaFinal = año+"-"+mes+"-0"+dia;
 
-    }else if(mes < 10 && dia < 10){
+    } if(mes < 10 && dia < 10){
 
       var fechaInicial = año+"-0"+mes+"-0"+dia;
       var fechaFinal = año+"-0"+mes+"-0"+dia;

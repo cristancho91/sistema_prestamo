@@ -152,24 +152,24 @@ class ControladorPrestamos{
 
 			$traerPrestamo = ModeloPrestamos::mdlMostrarPrestamos($tabla, $item, $valor);
 			$saldoPendiente = $traerPrestamo["saldo_pendiente"];
+			//cliente nuevo
 			$tablaClientes = "clientes";
 			$itemCliente = "id";
 			$valorCliente = $_POST["seleccionarCliente"];
 			$traerCliente = ModeloClientes::mdlMostrarClientes($tablaClientes, $itemCliente, $valorCliente);
 			$compraCliente = $traerCliente["compras"];
+			//cliente anterior
+			$valorCliente2 = $_POST["idClienteViejo"];
+			$traerCliente2 = ModeloClientes::mdlMostrarClientes($tablaClientes, $itemCliente, $valorCliente2);
+			$compraCliente2 = $traerCliente2["compras"];
 			
-			$compraCliente1 = 0;
 
 			if($_POST["idClienteViejo"] != $_POST["seleccionarCliente"]){
 
-				$compraCliente1 =$compraCliente + 1;
+				$compraCliente +=1;
+				$compraCliente2 -=1;
 
 			
-			}	else{;
-
-				
-				$compraCliente1 = $compraCliente -1;
-				
 			}
 
 			/*=============================================
@@ -178,15 +178,19 @@ class ControladorPrestamos{
 
 			$datos = array("id_vendedor"=>$_POST["idVendedor"],
 						   "id_cliente"=>$_POST["seleccionarCliente"],
+						   "id_clienteViejo"=>$_POST["idClienteViejo"],
 						   "id_prestamo"=>$_POST["idPrestamo"],
 						   "codigo"=>$_POST["nuevoPrestamo"],
-						   "comprasCliente"=>$compraCliente1,
+						   "comprasClienteNuevo"=>$compraCliente,
+						   "comprasClienteViejo"=>$compraCliente2,
 						   "codeudor"=>$_POST["seleccionarCodeudor"],
 						   "monto"=>$_POST["editarMonto"],
+						   "montoAnterior"=>$_POST["montoAnterior"],
 						   "plazo"=>$_POST["nuevoMetodoPago"],
 						   "tasa_interes"=>$_POST["interes"],
 						   "fecha_prestamo"=>$_POST["fechaPrestamo"],
-						   "forma_pago"=>$_POST["formaPago"]);
+						   "saldoPendiente"=>$saldoPendiente,
+						   "formaPago"=>$_POST["formaPago"]);
 
 
 			$respuesta = ModeloPrestamos::mdlEditarPrestamo($tabla, $datos);
@@ -212,6 +216,26 @@ class ControladorPrestamos{
 
 				</script>';
 
+			}else{
+
+				echo'<script>
+	
+			swal({
+				  type: "error",
+				  title: "el prestamo no se pudo Actualizar.",
+				  showConfirmButton: true,
+				  confirmButtonText: "Cerrar"
+				  }).then(function(result){
+							if (result.value) {
+	
+							window.location = "prestamos";
+	
+							}
+						})
+	
+				</script>';
+		
+				return;
 			}
 
 		}
@@ -329,7 +353,7 @@ class ControladorPrestamos{
 
 				swal({
 					  type: "success",
-					  title: "La venta ha sido borrada correctamente",
+					  title: "El Prestamo ha sido borrado correctamente",
 					  showConfirmButton: true,
 					  confirmButtonText: "Cerrar"
 					  }).then(function(result){

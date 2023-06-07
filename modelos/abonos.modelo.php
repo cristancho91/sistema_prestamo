@@ -125,6 +125,7 @@ class ModeloAbonos{
 					// Actualizar el saldo pendiente
 					$capital= $cantidad_pendiente;
 				}
+	
 
 				//actualizamos el capital pendiente
 				$stmt6 = $pdo->prepare("UPDATE prestamos SET saldo_pendiente = :capital_pendiente WHERE id_prestamo = :id_prestamo");
@@ -219,7 +220,7 @@ class ModeloAbonos{
 			}
 
 			//guardamos la ganancia
-			$stmt5 = $pdo->prepare("INSERT INTO ganancia(id_prestamo,ganancia) VALUES (:id_prestamo,:ganancia)");
+			$stmt5 = $pdo->prepare("INSERT INTO ganancia(id_prestamo, ganancia) VALUES (:id_prestamo, :ganancia)");
 
 			$stmt5->bindParam(":id_prestamo", $datos["idPrestamo"], PDO::PARAM_INT);
 			$stmt5->bindParam(":ganancia", $datos["ganancia"], PDO::PARAM_INT);

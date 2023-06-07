@@ -70,6 +70,8 @@ if($_SESSION["perfil"] == "Especial"){
                   $valorCliente = $prestamo["id_cliente"];
 
                   $cliente = ControladorClientes::ctrMostrarClientes($itemCliente, $valorCliente);
+                  $valorCodeudor = $prestamo["id_codeudor"];
+                  $codeudor = ControladorCodeudores::ctrMostrarCodeudores($itemCliente, $valorCodeudor);
 
 
                 ?>
@@ -159,16 +161,17 @@ if($_SESSION["perfil"] == "Especial"){
                     
                     <select class="form-control" id="seleccionarCodeudor" name="seleccionarCodeudor" required>
 
-                    <!-- <option value="">Seleccionar Codeudor</option> -->
+                    <option value="<?php echo $codeudor["id"]; ?>"><?php echo $codeudor["nombre"]; ?></option>
+
 
                     <?php
 
                       $item = null;
                       $valor = null;
 
-                      $categorias = ControladorCodeudores::ctrMostrarCodeudores($item, $valor);
+                      $codeudores = ControladorCodeudores::ctrMostrarCodeudores($item, $valor);
 
-                       foreach ($categorias as $key => $value) {
+                       foreach ($codeudores as $key => $value) {
 
                          echo '<option value="'.$value["id"].'">'.$value["nombre"].'</option>';
 
@@ -193,6 +196,8 @@ if($_SESSION["perfil"] == "Especial"){
                   <span class="input-group-addon"><i class="fa fa-money"></i></span>
 
                   <input type ="number" class="form-control editarMonto"  name="editarMonto" value="<?php echo $prestamo["monto"];?>" placeholder="introduce la cantidad a prestar..."  required>
+                  <input type="hidden" name="montoAnterior" value="<?php echo $prestamo["monto"];?>">
+                  <input type="hidden" name="saldoPendiente" value="<?php echo $prestamo["saldo_pendiente"];?>">
 
                 </div>
 

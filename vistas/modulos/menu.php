@@ -72,6 +72,16 @@
 			</li>
 			<li>
 
+				<a href="ganancias">
+
+					<i class="fa fa-money"></i>
+					<span>Ganancias</span>
+
+				</a>
+
+			</li>
+			<li>
+
 				<a href="codeudores">
 
 					<i class="fa fa-address-card"></i>

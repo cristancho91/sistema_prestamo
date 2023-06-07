@@ -81,7 +81,7 @@ class ControladorAbonos{
 					  }).then(function(result){
 								if (result.value) {
 
-								window.location = "cobros";
+								window.location = "abonos";
 
 								}
 							})
