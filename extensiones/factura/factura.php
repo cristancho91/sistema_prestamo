@@ -306,8 +306,8 @@ class imprimirFactura{
 							<span class="h2">INVERSIONES ANGELICA</span>
 							<!-- <p>NIT: 1065885168-3</p>							 -->
 							<p>Teléfono: 3162482360</p>
-							<p>Email: DELIA@gmail.com</p>
-							<p>Reservas del Buturama</p>
+							<p>Email: yeyin-25@hotmail.com</p>
+							<!-- <p></p> -->
 							<p>Aguachica-Cesar</p>
 							
 							
