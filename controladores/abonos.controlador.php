@@ -117,6 +117,20 @@ class ControladorAbonos{
 	}
 
 	/*=============================================
+	RANGO FECHAS ABONOS
+	=============================================*/	
+
+	static public function ctrRangoFechasAbonos($fechaInicial, $fechaFinal){
+
+		$tabla = "abonos";
+
+		$respuesta = ModeloAbonos::mdlRangoFechasAbonos($tabla, $fechaInicial, $fechaFinal);
+
+		return $respuesta;
+		
+	}
+
+	/*=============================================
 	EDITAR CATEGORIA
 	=============================================*/
 

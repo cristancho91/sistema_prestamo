@@ -38,7 +38,7 @@ if($_SESSION["perfil"] == "Vendedor"){
 
     <div class="box">
 
-      <div class="box-header with-border">
+      <!-- <div class="box-header with-border">
   
         <button class="btn btn-primary" data-toggle="modal" data-target="#modalAgregarCategoria">
           
@@ -46,7 +46,7 @@ if($_SESSION["perfil"] == "Vendedor"){
 
         </button>
 
-      </div>
+      </div> -->
 
       <div class="box-body">
         

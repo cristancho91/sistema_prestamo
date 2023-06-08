@@ -11,7 +11,10 @@ class ModeloGanancia{
 
 		if($fechaInicial == null){
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla");
+			$stmt = Conexion::conectar()->prepare("SELECT g.*,p.*,c.nombre AS nombre_cliente
+            FROM $tabla g
+			INNER JOIN prestamos p ON g.id_prestamo = p.id_prestamo 
+			INNER JOIN clientes c ON p.id_cliente = c.id ORDER BY fecha_ganancia ASC");
 
 			$stmt -> execute();
 
@@ -20,7 +23,10 @@ class ModeloGanancia{
 
 		}else if($fechaInicial == $fechaFinal){
 
-			$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE fecha_ganancia like '%$fechaFinal%'");
+			$stmt = Conexion::conectar()->prepare("SELECT g.*,p.*,c.nombre AS nombre_cliente
+            FROM $tabla g
+			INNER JOIN prestamos p ON g.id_prestamo = p.id_prestamo 
+			INNER JOIN clientes c ON p.id_cliente = c.id  WHERE fecha_ganancia like '%$fechaFinal%'");
 
 			$stmt -> execute();
 
@@ -38,12 +44,18 @@ class ModeloGanancia{
 
 			if($fechaFinalMasUno == $fechaActualMasUno){
 
-				$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
+				$stmt = Conexion::conectar()->prepare("SELECT g.*,p.*,c.nombre AS nombre_cliente
+            FROM $tabla g
+			INNER JOIN prestamos p ON g.id_prestamo = p.id_prestamo 
+			INNER JOIN clientes c ON p.id_cliente = c.id  WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinalMasUno'");
 
 			}else{
 
 
-				$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla  WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinal'");
+				$stmt = Conexion::conectar()->prepare("SELECT g.*,p.*,c.nombre AS nombre_cliente
+            FROM $tabla g
+			INNER JOIN prestamos p ON g.id_prestamo = p.id_prestamo 
+			INNER JOIN clientes c ON p.id_cliente = c.id  WHERE fecha_ganancia BETWEEN '$fechaInicial' AND '$fechaFinal'");
 
 			}
 		
