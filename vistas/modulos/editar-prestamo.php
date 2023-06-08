@@ -215,6 +215,7 @@ if($_SESSION["perfil"] == "Especial"){
                         
                         <div class="input-group">
                           <label for="">Plazo:</label>
+                          <input type="hidden" name="plazo_anterior" value="<?php $prestamo["tiempo_en_meses"];  ?>">  
                           <select class="form-control" id="nuevoMetodoPago" name="nuevoMetodoPago" required>
                           
 
@@ -237,12 +238,14 @@ if($_SESSION["perfil"] == "Especial"){
                           }
 
                           ?>                  
-                          </select>    
+                          </select>  
+                          
 
                         </div>
                       </div>
                       <div class="col-lg-6">
                         <label for="">Interes:</label>
+                        <input type="hidden" name="interes_anterior" value="<?php $prestamo["tasa_interes"];  ?>">  
 
                         <select class="form-control" id="interes" name="interes" required>
                         <?php
@@ -268,6 +271,8 @@ if($_SESSION["perfil"] == "Especial"){
                         <div class="input-group">
 
                         <label for="">Forma de pago:</label>
+                        <input type="hidden" name="formaPago_anterior" value="<?php $prestamo["forma_pago"];  ?>">  
+
                       
                           <select class="form-control" id="formaPago" name="formaPago" required>
                             <?php

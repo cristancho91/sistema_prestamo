@@ -187,8 +187,11 @@ class ControladorPrestamos{
 						   "monto"=>$_POST["editarMonto"],
 						   "montoAnterior"=>$_POST["montoAnterior"],
 						   "plazo"=>$_POST["nuevoMetodoPago"],
+						   "plazoAnterior"=>$_POST["plazo_anterior"],
 						   "tasa_interes"=>$_POST["interes"],
+						   "tasainteres_anterior"=>$_POST["interes_anterior"],
 						   "fecha_prestamo"=>$_POST["fechaPrestamo"],
+						   "formaPago_anterior"=>$_POST["fechaPrestamo"],
 						   "saldoPendiente"=>$saldoPendiente,
 						   "formaPago"=>$_POST["formaPago"]);
 

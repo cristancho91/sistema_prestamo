@@ -214,7 +214,7 @@ class ModeloPrestamos{
 					$stmt2->execute();
 				}
 
-				if($datos["montoAnterior"] != $datos["monto"]){
+				if($datos["montoAnterior"] != $datos["monto"] || $datos["plazo"] != $datos["plazoAnterior"]|| $datos["tasa_interes"] != $datos["tasainteres_anterior"] || $datos["formaPago"] != $datos["formaPago_anterior"]){
 
 				
 					//eliminamos las cuotas que no se hallan pagado
