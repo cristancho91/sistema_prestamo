@@ -221,12 +221,22 @@ if($_SESSION["perfil"] == "Especial"){
                             <option value="">Seleccione el plazo </option>
                             <?php 
 
-                              for ($i=1; $i <= 12 ; $i++) { 
+                              for ($i=1; $i <= 36 ; $i++) { 
                                 if($i == 12){
-                                  echo '<option value="'.$i.'">1 año</option>'; 
-
-                                }else{
-                                  echo '<option value="'.$i.'">'.$i.' meses</option>'; 
+                                  echo '<option value="'.$i.'">1 Año</option>'; 
+    
+                                }else if($i == 18){
+                                  echo '<option value="'.$i.'">Año y medio</option>';
+    
+                                }else if ($i == 24) {
+                                  echo '<option value="'.$i.'">2 Años</option>'; 
+                                  
+                                }else if($i == 36){
+                                  echo '<option value="'.$i.'">3 Años</option>'; 
+    
+                                }
+                                else{
+                                  echo '<option value="'.$i.'">'.$i.' Meses</option>'; 
                                 }
                               }
                             
