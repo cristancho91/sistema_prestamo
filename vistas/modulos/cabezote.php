@@ -8,7 +8,7 @@
 		<!-- logo mini -->
 		<span class="logo-mini">
 			
-			<img src="vistas/img/plantilla/logocolor.png" class="img-responsive" style="padding: 5px;">
+			<img src="vistas/img/plantilla/1.png" class="img-responsive" style="padding: 5px;">
 
 		</span>
 
@@ -16,7 +16,7 @@
 
 		<span class="logo-lg">
 			
-			<img src="vistas/img/plantilla/CRISTANCHO.png" class="img-responsive" >
+			<img src="vistas/img/plantilla/22.png" class="img-responsive" >
 
 		</span>
 
