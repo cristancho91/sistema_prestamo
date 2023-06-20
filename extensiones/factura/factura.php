@@ -296,7 +296,8 @@ class imprimirFactura{
 				<tr>
 					<td class="logo_factura">
 						<div>
-							<!-- <img src="/extensiones/factura/img/logocolor.png" />  -->
+							<!-- <img src="/vistas/img/plantilla/1.png" class=" im" />  -->
+							
 						</div>
 						
 					</td>
