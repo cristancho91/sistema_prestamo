@@ -400,6 +400,9 @@ $(document).ready(function() {
 		/*=============================================
 		RECOGER PRESTAMO
 		=============================================*/
+		const sumar = (num1,num2)=>{
+			return num1+ num2;
+		} 
 		$(".tablaPrestamos").on("click", ".btnCancelarPrestamo", function(){
 
 			var codigoPrestamo = $(this).attr("codigoPrestamo");
@@ -424,7 +427,7 @@ $(document).ready(function() {
 					let monto = respuesta["monto"];
 
 					let interesPagar =(saldoPendiente*tasaInteres);
-					let cantidadPagar =parseFloat(saldoPendiente) + parseFloat(interesPagar);
+					let cantidadPagar =sumar(parseFloat(saldoPendiente), parseFloat(interesPagar));
 
 					$("#idPrestamo").val(respuesta["id_prestamo"]);
 					$("#cantidad_prestamo").val(respuesta["monto"]);
