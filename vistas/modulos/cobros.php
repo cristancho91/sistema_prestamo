@@ -19,7 +19,7 @@ if($_SESSION["perfil"] == "Vendedor"){
     
     <h1>
       
-      Administrar Cobros
+      Administrar Cuotas
     
     </h1>
 
