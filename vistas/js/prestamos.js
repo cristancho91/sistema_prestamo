@@ -419,12 +419,13 @@ $(document).ready(function() {
 				success: function(respuesta){
 
 					// console.log(respuesta);
-					let saldoPendiente = respuesta["saldo_pendiente"];
-					let tasaInteres = respuesta["tasa_interes"]/100;
+					let saldoPendiente =Number(respuesta["saldo_pendiente"]);
+					let tasaInteres = Number(respuesta["tasa_interes"]/100);
 					let monto = respuesta["monto"];
 
 					let interesPagar =(saldoPendiente*tasaInteres);
 					let cantidadPagar =Number(saldoPendiente) + Number(interesPagar);
+					console.log(cantidadPagar);
 
 					$("#idPrestamo").val(respuesta["id_prestamo"]);
 					$("#cantidad_prestamo").val(respuesta["monto"]);
