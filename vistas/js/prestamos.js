@@ -424,7 +424,7 @@ $(document).ready(function() {
 					let monto = respuesta["monto"];
 
 					let interesPagar =(saldoPendiente*tasaInteres);
-					let cantidadPagar = saldoPendiente + interesPagar;
+					let cantidadPagar =Number(saldoPendiente) + Number(interesPagar);
 
 					$("#idPrestamo").val(respuesta["id_prestamo"]);
 					$("#cantidad_prestamo").val(respuesta["monto"]);
