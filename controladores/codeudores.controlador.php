@@ -10,10 +10,7 @@ class ControladorCodeudores{
 
 		if(isset($_POST["nuevoCodeudor"])){
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["nuevoCodeudor"]) &&
-			   preg_match('/^[0-9]+$/', $_POST["nuevoDocumento"]) && 
-			   preg_match('/^[()\-0-9 ]+$/', $_POST["telefono"]) && 
-			   preg_match('/^[#\.\-a-zA-Z0-9 ]+$/', $_POST["direccion"])){
+			if($_POST["nuevoCodeudor"]){
 
 			   	$tabla = "codeudores";
 
@@ -51,7 +48,7 @@ class ControladorCodeudores{
 
 					swal({
 						  type: "error",
-						  title: "¡El codeudor no puede ir vacío o llevar caracteres especiales!",
+						  title: "¡El codeudor no pudo ser creado!",
 						  showConfirmButton: true,
 						  confirmButtonText: "Cerrar"
 						  }).then(function(result){
@@ -94,10 +91,7 @@ class ControladorCodeudores{
 
 		if(isset($_POST["editarCodeudor"])){
 
-			if(preg_match('/^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$/', $_POST["editarCodeudor"]) &&
-			   preg_match('/^[0-9]+$/', $_POST["editarDocumentoId"]) &&
-			   preg_match('/^[()\-0-9 ]+$/', $_POST["editarTelefono"]) && 
-			   preg_match('/^[#\.\-a-zA-Z0-9 ]+$/', $_POST["editarDireccion"])){
+			if($_POST["editarCodeudor"]){
 
 			   	$tabla = "codeudores";
 
@@ -136,7 +130,7 @@ class ControladorCodeudores{
 
 					swal({
 						  type: "error",
-						  title: "¡El codeudor no puede ir vacío o llevar caracteres especiales!",
+						  title: "¡El codeudor no pudo ser editado!",
 						  showConfirmButton: true,
 						  confirmButtonText: "Cerrar"
 						  }).then(function(result){
