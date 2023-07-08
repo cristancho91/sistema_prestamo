@@ -199,7 +199,7 @@ if($_SESSION["perfil"] == "Especial"){
       
                   <span class="input-group-addon"><i class="fa fa-money"></i></span>
 
-                  <input type ="number" class="form-control nuevoPrestamo"  name="nuevoPrestamo" value="" placeholder="introduce la cantidad a prestar..."  required>
+                  <input type ="number" id="nuevoPrestamo" class="form-control nuevoPrestamo"  name="nuevoPrestamo" value="" placeholder="introduce la cantidad a prestar..."  required>
 
                 </div>
 
