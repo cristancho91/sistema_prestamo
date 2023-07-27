@@ -59,7 +59,7 @@ $(document).ready(function() {
 		$('#daterange-btnCobros').daterangepicker(
 		{
 			ranges   : {
-			'hoy'       : [moment(), moment()],
+			'hoy4'       : [moment(), moment()],
 			'Ayer'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
 			'Últimos 7 días' : [moment().subtract(6, 'days'), moment()],
 			'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
@@ -88,27 +88,29 @@ $(document).ready(function() {
 		CANCELAR RANGO DE FECHAS
 		=============================================*/
 
-		$(".daterangepicker.opensleft .range_inputs .cancelBtnCobros").on("click", function(){
-
+		$(".daterangepicker.opensleft .range_inputs .cancelBtnCobros").on("click", function() {
 			localStorage.removeItem("capturarRangocobro");
 			localStorage.clear();
-
+		
 			// Obtener la cadena de consulta de la URL actual
 			var queryString = window.location.search;
-
+		
 			// Crear un objeto URLSearchParams para analizar la cadena de consulta
 			var params = new URLSearchParams(queryString);
-
-			// Obtener el valor de una variable GET específica
+		
+			// Obtener el valor de la variable GET "ruta"
 			var ruta = params.get('ruta');
-
-			// if(ruta==null){
-			// 	ruta = "cobros";
-			// }
-
-			// Utilizar el valor de la ruta GET
-			window.location = ruta;
+		
+			// Verificar si la variable ruta es null o está vacía
+			if (ruta === null || ruta === "") {
+				// Asignar un valor predeterminado a ruta si no está presente en la URL
+				ruta = "cobros"; // Reemplaza "ruta_predeterminada" por la ruta deseada
+			}
+		
+			// Utilizar el valor de ruta para la redirección
+			window.location.href = ruta;
 		});
+		
 
 		/*=============================================
 		CAPTURAR HOY
@@ -118,7 +120,7 @@ $(document).ready(function() {
 
 			var textoHoy = $(this).attr("data-range-key");
 
-			if(textoHoy == "hoy"){
+			if(textoHoy == "hoy4"){
 
 				var d = new Date();
 				
@@ -143,7 +145,7 @@ $(document).ready(function() {
 				}
 				const fechaInicial = año + "-" +mes+"-"+dia;
 				const fechaFinal = año + "-" +mes+"-"+dia;
-				localStorage.setItem("capturarRangocobro", "Hoy");
+				localStorage.setItem("capturarRangocobro", "hoy4");
 
 				window.location = "index.php?ruta=cobros&fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
 

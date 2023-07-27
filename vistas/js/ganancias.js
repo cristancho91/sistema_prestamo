@@ -111,27 +111,23 @@ $(document).ready(function() {
             var mes = d.getMonth()+1;
             var año = d.getFullYear();
 
-            if(mes < 10){
+            
+				if(mes < 10){
 
-                var fechaInicial = año+"-0"+mes+"-"+dia;
-                var fechaFinal = año+"-0"+mes+"-"+dia;
+					mes = "0"+mes;
 
-            }if(dia < 10){
+				}if(dia < 10){
 
-                var fechaInicial = año+"-"+mes+"-0"+dia;
-                var fechaFinal = año+"-"+mes+"-0"+dia;
+					dia ="0"+dia;
 
-            }if(mes < 10 && dia < 10){
+				}if(mes < 10 && dia < 10){
 
-                var fechaInicial = año+"-0"+mes+"-0"+dia;
-                var fechaFinal = año+"-0"+mes+"-0"+dia;
+					mes = "0"+mes;
+					dia ="0"+dia;
 
-            }else{
-
-                var fechaInicial = año+"-"+mes+"-"+dia;
-                var fechaFinal = año+"-"+mes+"-"+dia;
-
-            }
+				}
+				const fechaInicial = año + "-" +mes+"-"+dia;
+				const fechaFinal = año + "-" +mes+"-"+dia;
             localStorage.setItem("capturaRangoGanancia", "Hoy");
 
             window.location = "index.php?ruta=ganancias&fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;

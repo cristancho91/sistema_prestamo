@@ -18,7 +18,7 @@ if ($_SESSION["perfil"] == "Vendedor") {
 
     <h1>
 
-      Todas las Cuotas
+      Cuotas Pagadas
 
     </h1>
 
@@ -27,7 +27,7 @@ if ($_SESSION["perfil"] == "Vendedor") {
       <li><a href="inicio"><i class="fa fa-dashboard"></i> Inicio</a></li>
 
       <li class="active">Administrar cuotas</li>
-      <li class="active">Todas las cuotas</li>
+      <li class="active">Cuotas Pagadas</li>
 
     </ol>
 
@@ -45,7 +45,7 @@ if ($_SESSION["perfil"] == "Vendedor") {
 
         </button> -->
 
-        <button type="button" class="btn btn-success pull-right btnCobros" id="daterange-btnCobros">
+        <button type="button" class="btn btn-success pull-right btnCuotas-pagadas" id="daterange-btnCuotas-pagadas">
 
           <span>
             <i class="fa fa-calendar"></i> Rango de fecha
@@ -86,8 +86,8 @@ if ($_SESSION["perfil"] == "Vendedor") {
               <th>Capital pendiente</th>
               <th>Estado</th>
               <th>Fecha cobro</th>
-              <th>Días en mora</th>
-              <th>Acciones</th>
+              <th>Fecha de pago</th>
+              <!-- <th>Acciones</th> -->
 
             </tr>
 
@@ -115,126 +115,38 @@ if ($_SESSION["perfil"] == "Vendedor") {
             foreach ($respuesta as $key => $value) {
               //DIAS EN MORA
               // ---------------------------------------------------------
-              if ($value["estado"]) {
-
-                $activo = "<button type='button' class='btn btn-success'>Activo</button>";
-                $primeraFechaPendiente = $value["fecha_vencimiento"];
-
-                // $fechaPago = '2023-05-28';
-
-
-                $fechaPagoObj = DateTime::createFromFormat('Y-m-d', $primeraFechaPendiente); // Convertir la fecha de pago a un objeto DateTime
-
-                if ($fechaActual > $fechaPagoObj) {
-                  $intervalo = $fechaActual->diff($fechaPagoObj);
-                  $diasMora = $intervalo->days;
-                  $fechaVencimiento = "<span class='btn btn-danger'>" . $value["fecha_vencimiento"] . "</span>";
-                  
-                } else {
-                  $diasMora = 0;
-                  $fechaVencimiento = "<span class='btn btn-default'>" . $value["fecha_vencimiento"] . "</span>";
-                  
-                }
-                // break;
-
-                // ---------------------------------------------------------
-
-              echo '<tr>
-
-              <td>' . ($key + 1) . '</td>
-              <td>' . $value["nombre_cliente"] . '</td>
-              <td>' . $value["num_cuota"] . '</td>
-
-              <td>$ ' . number_format($value["monto_cuota"], 0) . '</td>
-
-              <td>$ ' . number_format($value["interes_a_pagar"], 0) . '</td>
-              <td>$ ' . $value["capital_a_pagar"] . '</td>
-              <td>$ ' . number_format($value["cantidad_pendiente"], 0) . '</td>
-              <td>' . $activo . '</td>';
-
-          echo '
-
-              <td>' . $fechaVencimiento . '</td>
-              <td>' . $diasMora . '</td>
-
-              <td>
-
-                <div class="btn-group">';
-
-          if ($value["estado"]) {
-            echo '
-                  <button  class="btn btn-success btnPagarCuota" data-toggle="modal" data-target="#modalPagarCuota" data-id_cuota="' . $value["id_cuota"] . '">
-
-                  <i class="fa fa-tasks"></i>
-
-                  </button>
-
-                  <button class="btn btn-primary btnAbonoPrestamo" data-toggle="modal" data-target="#modalAbono"  data-id_cuota="' . $value["id_cuota"] . '">
-
-                  <i class="fa fa-money"></i>
-
-                  </button>';
-          }
-
-          echo '</div>  
-
-              </td>
-
-            </tr>';
-              } else {
-                $activo = "<button type='button' class='btn btn-warning'>Pagado</button>";
-                $diasMora = 0;
-
-                // ---------------------------------------------------------
-
-              echo '<tr>
-
-              <td>' . ($key + 1) . '</td>
-              <td>' . $value["nombre_cliente"] . '</td>
-              <td>' . $value["num_cuota"] . '</td>
-
-              <td>$ ' . number_format($value["monto_cuota"], 0) . '</td>
-
-              <td>$ ' . number_format($value["interes_a_pagar"], 0) . '</td>
-              <td>$ ' . $value["capital_a_pagar"] . '</td>
-              <td>$ ' . number_format($value["cantidad_pendiente"], 0) . '</td>
-              <td>' . $activo . '</td>';
-
-          echo '
-
-              <td>' . $value["fecha_vencimiento"] . '</td>
-              <td>' . $diasMora . '</td>
-
-              <td>
-
-                <div class="btn-group">';
-
-          if ($value["estado"]) {
-            echo '
-                  <button  class="btn btn-success btnPagarCuota" data-toggle="modal" data-target="#modalPagarCuota" data-id_cuota="' . $value["id_cuota"] . '">
-
-                  <i class="fa fa-tasks"></i>
-
-                  </button>
-
-                  <button class="btn btn-primary btnAbonoPrestamo" data-toggle="modal" data-target="#modalAbono"  data-id_cuota="' . $value["id_cuota"] . '">
-
-                  <i class="fa fa-money"></i>
-
-                  </button>';
-          }
-
-          echo '</div>  
-
-              </td>
-
-            </tr>';
+              $diasMora = 0;
+              if (!$value["estado"]) {
                 
-                // continue;
+
+                echo '<tr>
+
+                  <td>' . ($key + 1) . '</td>
+                  <td>' . $value["nombre_cliente"] . '</td>
+                  <td>' . $value["num_cuota"] . '</td>
+
+                  <td>$ ' . number_format($value["monto_cuota"], 0) . '</td>
+
+                  <td>$ ' . number_format($value["interes_a_pagar"], 0) . '</td>
+                  <td>$ ' . $value["capital_a_pagar"] . '</td>
+                  <td>$ ' . number_format($value["cantidad_pendiente"], 0) . '</td>
+                  <td>Pagada</td>';
+
+              echo '
+
+                  <td>' . $value["fecha_vencimiento"] . '</td>
+                  <td>' . $value["fecha_actualizacion"]. '</td>
+
+                  
+
+                </tr>';
               }
+              //  else {
+              //   $activo = "<button type='button' class='btn btn-warning'>Pagado</button>";
+              //   // continue;
+              // }
 
-
-
+              // ---------------------------------------------------------
 
               
             }

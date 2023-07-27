@@ -140,9 +140,14 @@ CUERPO DOCUMENTO
          $_GET["ruta"] == "usuarios" ||
          $_GET["ruta"] == "abonos" ||
          $_GET["ruta"] == "cobros" ||
+         $_GET["ruta"] == "cuotas-activas" ||
+         $_GET["ruta"] == "cuotas-pagadas" ||
+         $_GET["ruta"] == "cuotas-pendientes" ||
          $_GET["ruta"] == "clientes" ||
          $_GET["ruta"] == "codeudores" ||
+         $_GET["ruta"] == "prestamos-activos" ||
          $_GET["ruta"] == "prestamos" ||
+         $_GET["ruta"] == "prestamos-pagados" ||
          $_GET["ruta"] == "pagos" ||
          $_GET["ruta"] == "crear-prestamo" ||
          $_GET["ruta"] == "editar-prestamo" ||
@@ -153,9 +158,8 @@ CUERPO DOCUMENTO
         include "modulos/".$_GET["ruta"].".php";
 
       }else{
-
-        include "modulos/404.php";
-
+          include "modulos/404.php";
+       
       }
 
     }else{
@@ -187,9 +191,14 @@ CUERPO DOCUMENTO
 <script src="vistas/js/abonos.js"></script>
 <script src="vistas/js/clientes.js"></script>
 <script src="vistas/js/cobros.js"></script>
+<script src="vistas/js/cuotas-activas.js"></script>
+<script src="vistas/js/cuotas-pendientes.js"></script>
+<script src="vistas/js/cuotas-pagadas.js"></script>
 <script src="vistas/js/prestamos.js"></script>
 <script src="vistas/js/reportes.js"></script>
 <script src="vistas/js/codeudores.js"></script>
+<script src="vistas/js/prestamos-activos.js"></script>
+<script src="vistas/js/prestamos-pagados.js"></script>
 <script src="vistas/js/ganancias.js"></script>
 
 </body>

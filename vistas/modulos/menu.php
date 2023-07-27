@@ -43,20 +43,73 @@
 
 				</a>
 
-			</li>
-
-			<li>
-
-				<a href="cobros">
-
-					<i class="fa fa-list-ul"></i>
-					<span>Cuotas</span>
-
-				</a>
-
 			</li>';
 
 		}
+		echo '<li class="treeview">
+
+				<a href="#">
+
+					<i class="fa fa-list-ul"></i>
+					
+					<span>Administrar Cuotas</span>
+					
+					<span class="pull-right-container">
+					
+						<i class="fa fa-angle-left pull-right"></i>
+
+					</span>
+
+				</a>
+
+				<ul class="treeview-menu">
+
+					
+
+					<li>
+
+					<a href="cobros">
+						
+						<i class="fa fa-circle-o"></i>
+						<span>Todas las cuotas</span>
+
+					</a>
+
+					</li>
+					
+					<li>
+
+						<a href="cuotas-activas">
+							
+							<i class="fa fa-circle-o"></i>
+							<span>Cuotas Activas</span>
+
+						</a>
+
+					</li>
+					<li>
+
+						<a href="cuotas-pagadas">
+							
+							<i class="fa fa-circle-o"></i>
+							<span>Cuotas Pagadas</span>
+
+						</a>
+
+					</li>
+					<li>
+
+						<a href="cuotas-pendientes">
+							
+							<i class="fa fa-circle-o"></i>
+							<span>Cuotas Pendientes</span>
+
+						</a>
+
+					</li>
+					</ul>
+
+			</li>';
 
 		if($_SESSION["perfil"] == "Administrador" || $_SESSION["perfil"] == "Vendedor"){
 
@@ -112,24 +165,46 @@
 				</a>
 
 				<ul class="treeview-menu">
+
+					
+
+					<li>
+
+					<a href="crear-prestamo">
+						
+						<i class="fa fa-circle-o"></i>
+						<span>Crear Prestamo</span>
+
+					</a>
+
+					</li>
 					
 					<li>
 
 						<a href="prestamos">
 							
 							<i class="fa fa-circle-o"></i>
-							<span>Administrar Prestamos</span>
+							<span>Todos los Prestamos</span>
 
 						</a>
 
 					</li>
-
 					<li>
 
-						<a href="crear-prestamo">
+						<a href="prestamos-activos">
 							
 							<i class="fa fa-circle-o"></i>
-							<span>Crear Prestamo</span>
+							<span>Prestamos Activos</span>
+
+						</a>
+
+					</li>
+					<li>
+
+						<a href="prestamos-pagados">
+							
+							<i class="fa fa-circle-o"></i>
+							<span>Prestamos Pagados</span>
 
 						</a>
 
