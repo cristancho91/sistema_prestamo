@@ -59,7 +59,7 @@ $(document).ready(function() {
 		$('#daterange-btnCobros').daterangepicker(
 		{
 			ranges   : {
-			'Hoy2'       : [moment(), moment()],
+			'hoy'       : [moment(), moment()],
 			'Ayer'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
 			'Últimos 7 días' : [moment().subtract(6, 'days'), moment()],
 			'Últimos 30 días': [moment().subtract(29, 'days'), moment()],
@@ -118,36 +118,32 @@ $(document).ready(function() {
 
 			var textoHoy = $(this).attr("data-range-key");
 
-			if(textoHoy == "Hoy2"){
+			if(textoHoy == "hoy"){
 
 				var d = new Date();
 				
 				var dia = d.getDate();
 				var mes = d.getMonth()+1;
 				var año = d.getFullYear();
+				
 
 				if(mes < 10){
 
-					var fechaInicial = año+"-0"+mes+"-"+dia;
-					var fechaFinal = año+"-0"+mes+"-"+dia;
+					mes = "0"+mes;
 
 				}if(dia < 10){
 
-					var fechaInicial = año+"-"+mes+"-0"+dia;
-					var fechaFinal = año+"-"+mes+"-0"+dia;
+					dia ="0"+dia;
 
 				}if(mes < 10 && dia < 10){
 
-					var fechaInicial = año+"-0"+mes+"-0"+dia;
-					var fechaFinal = año+"-0"+mes+"-0"+dia;
-
-				}else{
-
-					var fechaInicial = año+"-"+mes+"-"+dia;
-					var fechaFinal = año+"-"+mes+"-"+dia;
+					mes = "0"+mes;
+					dia ="0"+dia;
 
 				}
-				localStorage.setItem("capturarRangocobro", "Hoy2");
+				const fechaInicial = año + "-" +mes+"-"+dia;
+				const fechaFinal = año + "-" +mes+"-"+dia;
+				localStorage.setItem("capturarRangocobro", "Hoy");
 
 				window.location = "index.php?ruta=cobros&fechaInicial="+fechaInicial+"&fechaFinal="+fechaFinal;
 
