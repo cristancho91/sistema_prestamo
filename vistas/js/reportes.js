@@ -83,7 +83,7 @@ $(".daterangepicker.opensright .ranges li").on("click", function(){
       var fechaInicial = año+"-"+mes+"-0"+dia;
       var fechaFinal = año+"-"+mes+"-0"+dia;
 
-    } if(mes < 10 && dia < 10){
+    }else if(mes < 10 && dia < 10){
 
       var fechaInicial = año+"-0"+mes+"-0"+dia;
       var fechaFinal = año+"-0"+mes+"-0"+dia;

@@ -56,11 +56,9 @@
           
               if (mes < 10) {
                 mes = "0" + mes;
-              }
-              if (dia < 10) {
+              }if (dia < 10) {
                 dia = "0" + dia;
-              }
-              if (mes < 10 && dia < 10) {
+              }else if (mes < 10 && dia < 10) {
                 mes = "0" + mes;
                 dia = "0" + dia;
               }

@@ -91,7 +91,7 @@ $(document).ready(()=>{
         
                             dia ="0"+dia;
         
-                        }if(mes < 10 && dia < 10){
+                        }else if(mes < 10 && dia < 10){
         
                             mes = "0"+mes;
                             dia ="0"+dia;
